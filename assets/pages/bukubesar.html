@@ -1,0 +1,342 @@
+<div class="card">
+
+    <div class="page-header">
+
+        <h2>
+            📚 Buku Besar
+        </h2>
+
+        <div class="toolbar">
+
+            <button
+                class="btn btn-success"
+                onclick="loadBukuBesar()">
+
+                🔄 Refresh
+
+            </button>
+
+            <button
+                class="btn btn-primary"
+                onclick="exportBukuBesarExcel()">
+
+                📊 Excel
+
+            </button>
+
+            <button
+                class="btn btn-danger"
+                onclick="exportBukuBesarPDF()">
+
+                📄 PDF
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ==========================
+     FILTER AKUN
+========================== -->
+
+<div class="card">
+
+    <div class="filter-grid">
+
+        <div class="form-group">
+
+            <label>
+
+                Pilih Akun
+
+            </label>
+
+            <select
+                id="filterAkun"
+                class="form-control">
+
+                <option value="">
+
+                    Pilih Akun
+
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+
+                Dari Tanggal
+
+            </label>
+
+            <input
+                type="date"
+                id="bbTanggalAwal"
+                class="form-control">
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+
+                Sampai Tanggal
+
+            </label>
+
+            <input
+                type="date"
+                id="bbTanggalAkhir"
+                class="form-control">
+
+        </div>
+
+    </div>
+
+    <div
+        style="
+        display:flex;
+        gap:10px;
+        margin-top:15px;
+    ">
+
+        <button
+            class="btn btn-primary"
+            onclick="loadBukuBesar()">
+
+            🔍 Tampilkan
+
+        </button>
+
+        <button
+            class="btn btn-secondary"
+            onclick="resetBukuBesar()">
+
+            🔄 Reset
+
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ==========================
+     INFO AKUN
+========================== -->
+
+<div class="summary-grid">
+
+    <div class="summary-card">
+
+        <div class="summary-title">
+
+            Kode Akun
+
+        </div>
+
+        <div
+            class="summary-value"
+            id="bbKodeAkun">
+
+            -
+
+        </div>
+
+    </div>
+
+    <div class="summary-card">
+
+        <div class="summary-title">
+
+            Nama Akun
+
+        </div>
+
+        <div
+            class="summary-value"
+            id="bbNamaAkun">
+
+            -
+
+        </div>
+
+    </div>
+
+    <div class="summary-card">
+
+        <div class="summary-title">
+
+            Kelompok Akun
+
+        </div>
+
+        <div
+            class="summary-value"
+            id="bbKelompok">
+
+            -
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ==========================
+     SALDO
+========================== -->
+
+<!-- ==========================
+     RINGKASAN BUKU BESAR
+========================== -->
+
+<div class="summary-grid">
+
+    <div class="summary-card">
+
+        <div class="summary-title">
+            Jumlah Transaksi
+        </div>
+
+        <div
+            class="summary-value"
+            id="bbJumlah">
+
+            0
+
+        </div>
+
+    </div>
+
+    <div class="summary-card">
+
+        <div class="summary-title">
+            Saldo Awal
+        </div>
+
+        <div
+            class="summary-value"
+            id="bbSaldoAwal">
+
+            Rp 0
+
+        </div>
+
+    </div>
+
+    <div class="summary-card">
+
+        <div class="summary-title">
+            Total Debit
+        </div>
+
+        <div
+            class="summary-value text-success"
+            id="bbDebit">
+
+            Rp 0
+
+        </div>
+
+    </div>
+
+    <div class="summary-card">
+
+        <div class="summary-title">
+            Total Kredit
+        </div>
+
+        <div
+            class="summary-value text-danger"
+            id="bbKredit">
+
+            Rp 0
+
+        </div>
+
+    </div>
+
+    <div class="summary-card">
+
+        <div class="summary-title">
+            Saldo Akhir
+        </div>
+
+        <div
+            class="summary-value text-primary"
+            id="bbSaldoAkhir">
+
+            Rp 0
+
+        </div>
+
+    </div>
+    </div>
+    </div>
+
+<!-- ==========================
+     Transaksi Periode Berjalan
+========================== -->
+
+<div class="card">
+
+    <h3>
+
+        Transaksi Periode Berjalan
+
+    </h3>
+
+    <div class="table-responsive">
+
+        <table
+            class="table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Tanggal
+                    </th>
+
+                    <th>
+                        No Bukti
+                    </th>
+
+                    <th>
+                        Keterangan
+                    </th>
+
+                    <th>
+                        Debit
+                    </th>
+
+                    <th>
+                        Kredit
+                    </th>
+
+                    <th>
+                        Saldo
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody
+                id="bbTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

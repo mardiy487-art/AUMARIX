@@ -1,0 +1,346 @@
+/* =====================================================
+   AUMARIX ACCOUNTING SYSTEM
+   SIDEBAR.CSS
+===================================================== */
+
+/* ==========================
+   SIDEBAR
+========================== */
+
+.sidebar{
+
+    width:260px;
+
+    background:#0f172a;
+
+    color:white;
+
+    position:fixed;
+
+    top:0;
+    left:0;
+    bottom:0;
+
+    overflow-y:auto;
+
+    z-index:1000;
+
+    transition:.3s;
+
+}
+
+/* ==========================
+   LOGO
+========================== */
+
+.logo{
+
+    padding:20px;
+
+    text-align:center;
+
+    border-bottom:
+    1px solid rgba(255,255,255,.08);
+
+}
+
+.logo i{
+
+    font-size:42px;
+
+    color:#60a5fa;
+
+    margin-bottom:10px;
+
+}
+
+.logo h2{
+
+    color:white;
+
+    font-size:22px;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+}
+
+/* ==========================
+   NAVIGATION
+========================== */
+
+.sidebar nav{
+
+    padding-top:10px;
+
+}
+
+.sidebar ul{
+
+    list-style:none;
+
+}
+
+.sidebar ul li{
+
+    margin:2px 0;
+
+}
+
+/* ==========================
+   MENU LINK
+========================== */
+
+.sidebar ul li a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:14px 20px;
+
+    color:#cbd5e1;
+
+    font-size:14px;
+
+    transition:.3s;
+
+    border-left:
+    4px solid transparent;
+
+}
+
+.sidebar ul li a:hover{
+
+    background:#1e293b;
+
+    color:white;
+
+    border-left:
+    4px solid #3b82f6;
+
+}
+
+/* ==========================
+   ACTIVE MENU
+========================== */
+
+.sidebar ul li a.active{
+
+    background:#1e293b;
+
+    color:white;
+
+    border-left:
+    4px solid #3b82f6;
+
+}
+
+/* ==========================
+   ICON
+========================== */
+
+.sidebar ul li a i{
+
+    width:22px;
+
+    text-align:center;
+
+    font-size:16px;
+
+}
+
+/* ==========================
+   MAIN AREA
+========================== */
+
+.main{
+
+    margin-left:260px;
+
+    min-height:100vh;
+
+}
+
+/* ==========================
+   TOPBAR
+========================== */
+
+.topbar{
+
+    height:70px;
+
+    background:white;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 25px;
+
+    box-shadow:
+    0 2px 10px
+    rgba(0,0,0,.05);
+
+}
+
+/* ==========================
+   PAGE TITLE
+========================== */
+
+.topbar h1{
+
+    font-size:24px;
+
+    font-weight:700;
+
+    color:#334155;
+
+}
+
+/* ==========================
+   USER BOX
+========================== */
+
+.user-box{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    cursor:pointer;
+
+}
+
+.user-box i{
+
+    font-size:30px;
+
+    color:#64748b;
+
+}
+
+.user-box span{
+
+    font-weight:600;
+
+}
+
+/* ==========================
+   CONTENT
+========================== */
+
+#content{
+
+    padding:25px;
+
+}
+
+/* ==========================
+   SCROLLBAR
+========================== */
+
+.sidebar::-webkit-scrollbar{
+
+    width:6px;
+
+}
+
+.sidebar::-webkit-scrollbar-track{
+
+    background:#0f172a;
+
+}
+
+.sidebar::-webkit-scrollbar-thumb{
+
+    background:#334155;
+
+    border-radius:20px;
+
+}
+
+/* ==========================
+   MOBILE BUTTON
+========================== */
+
+.menu-toggle{
+
+    display:none;
+
+    font-size:24px;
+
+    cursor:pointer;
+
+}
+
+/* ==========================
+   RESPONSIVE TABLET
+========================== */
+
+@media(max-width:992px){
+
+    .sidebar{
+
+        width:230px;
+
+    }
+
+    .main{
+
+        margin-left:230px;
+
+    }
+
+}
+
+/* ==========================
+   RESPONSIVE MOBILE
+========================== */
+
+@media(max-width:768px){
+
+    .sidebar{
+
+        left:-260px;
+
+    }
+
+    .sidebar.show{
+
+        left:0;
+
+    }
+
+    .main{
+
+        margin-left:0;
+
+    }
+
+    .topbar{
+
+        padding:0 15px;
+
+    }
+
+    .menu-toggle{
+
+        display:block;
+
+    }
+
+    #content{
+
+        padding:15px;
+
+    }
+
+}

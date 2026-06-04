@@ -1,0 +1,618 @@
+/* =====================================================
+   AUMARIX ACCOUNTING SYSTEM
+   COA.CSS MODERN V3
+===================================================== */
+
+/* ==========================
+   PAGE HEADER
+========================== */
+
+.page-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:25px;
+
+    padding-bottom:15px;
+
+    border-bottom:
+    1px solid #e5e7eb;
+
+    flex-wrap:wrap;
+
+}
+
+.page-header h3{
+
+    margin:0;
+
+    color:#0f172a;
+
+    font-size:24px;
+
+    font-weight:700;
+
+}
+
+.header-actions{
+
+    display:flex;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+}
+
+/* ==========================
+   SUMMARY CARD
+========================== */
+
+.coa-summary{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(220px,1fr));
+
+    gap:15px;
+
+    margin-bottom:25px;
+
+}
+
+.summary-card{
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:20px;
+
+    box-shadow:
+    0 4px 20px
+    rgba(0,0,0,.06);
+
+    transition:.3s;
+
+    border-left:
+    5px solid #2563eb;
+
+}
+
+.summary-card:hover{
+
+    transform:
+    translateY(-3px);
+
+    box-shadow:
+    0 10px 30px
+    rgba(0,0,0,.08);
+
+}
+
+.summary-title{
+
+    color:#64748b;
+
+    font-size:13px;
+
+    margin-bottom:8px;
+
+}
+
+.summary-value{
+
+    font-size:24px;
+
+    font-weight:700;
+
+    color:#0f172a;
+
+}
+
+/* ==========================
+   SEARCH & FILTER
+========================== */
+
+.search-filter{
+
+    display:flex;
+
+    gap:10px;
+
+    margin-bottom:20px;
+
+    flex-wrap:wrap;
+
+}
+
+.search-filter input{
+
+    flex:1;
+
+    min-width:250px;
+
+}
+
+.search-filter select{
+
+    min-width:220px;
+
+}
+
+/* ==========================
+   FORM CONTROL
+========================== */
+
+.form-control{
+
+    width:100%;
+
+    padding:12px 14px;
+
+    border:1px solid #dbe2ea;
+
+    border-radius:10px;
+
+    background:#fff;
+
+    transition:.25s;
+
+}
+
+.form-control:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:
+    0 0 0 4px
+    rgba(37,99,235,.12);
+
+}
+
+/* ==========================
+   TABLE
+========================== */
+
+.table-responsive{
+
+    background:white;
+
+    border-radius:15px;
+
+    overflow:auto;
+
+    max-height:650px;
+
+    box-shadow:
+    0 5px 20px
+    rgba(0,0,0,.05);
+
+}
+
+.table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    min-width:1200px;
+
+}
+
+.table thead{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+.table thead th{
+
+    position:sticky;
+
+    top:0;
+
+    z-index:10;
+
+    padding:14px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    white-space:nowrap;
+
+}
+
+.table tbody td{
+
+    padding:12px;
+
+    border-bottom:
+    1px solid #e5e7eb;
+
+    vertical-align:middle;
+
+}
+
+.table tbody tr{
+
+    transition:.2s;
+
+}
+
+.table tbody tr:hover{
+
+    background:#eff6ff;
+
+}
+
+/* ==========================
+   COLUMN STYLE
+========================== */
+
+.text-right{
+
+    text-align:right;
+
+}
+
+.debit{
+
+    color:#16a34a;
+
+    font-weight:700;
+
+}
+
+.kredit{
+
+    color:#dc2626;
+
+    font-weight:700;
+
+}
+
+.coa-kode{
+
+    color:#2563eb;
+
+    font-weight:700;
+
+}
+
+.coa-nama{
+
+    font-weight:600;
+
+}
+
+/* ==========================
+   BADGE
+========================== */
+
+.badge{
+
+    display:inline-block;
+
+    padding:5px 10px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.badge-debit{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+.badge-kredit{
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+}
+
+.badge-neraca{
+
+    background:#dbeafe;
+
+    color:#1d4ed8;
+
+}
+
+.badge-labarugi{
+
+    background:#fef3c7;
+
+    color:#92400e;
+
+}
+
+/* ==========================
+   BUTTON
+========================== */
+
+.btn{
+
+    border:none;
+
+    border-radius:10px;
+
+    padding:10px 16px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    font-weight:600;
+
+}
+
+.btn:hover{
+
+    transform:
+    translateY(-2px);
+
+}
+
+.btn-primary{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+.btn-success{
+
+    background:#16a34a;
+
+    color:white;
+
+}
+
+.btn-warning{
+
+    background:#f59e0b;
+
+    color:white;
+
+}
+
+.btn-danger{
+
+    background:#dc2626;
+
+    color:white;
+
+}
+
+.btn-sm{
+
+    padding:8px 12px;
+
+    font-size:12px;
+
+}
+
+/* ==========================
+   ACTION BUTTON
+========================== */
+
+.action-buttons{
+
+    display:flex;
+
+    gap:6px;
+
+}
+
+/* ==========================
+   MODAL
+========================== */
+
+.modal{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+    rgba(0,0,0,.45);
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:9999;
+
+    padding:20px;
+
+}
+
+.modal-content{
+
+    background:white;
+
+    width:100%;
+
+    max-width:900px;
+
+    border-radius:20px;
+
+    padding:25px;
+
+    max-height:90vh;
+
+    overflow:auto;
+
+    box-shadow:
+    0 25px 60px
+    rgba(0,0,0,.20);
+
+}
+
+.modal-header{
+
+    margin-bottom:20px;
+
+}
+
+.modal-header h3{
+
+    margin:0;
+
+    color:#0f172a;
+
+}
+
+/* ==========================
+   FORM GRID
+========================== */
+
+.form-group{
+
+    margin-bottom:15px;
+
+}
+
+.form-label{
+
+    display:block;
+
+    margin-bottom:6px;
+
+    font-weight:600;
+
+    color:#475569;
+
+}
+
+.coa-form-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:15px;
+
+}
+
+/* ==========================
+   MODAL FOOTER
+========================== */
+
+.modal-footer{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:10px;
+
+    margin-top:20px;
+
+}
+
+/* ==========================
+   EMPTY DATA
+========================== */
+
+.coa-empty{
+
+    text-align:center;
+
+    padding:40px;
+
+    color:#94a3b8;
+
+}
+
+/* ==========================
+   RESPONSIVE TABLET
+========================== */
+
+@media(max-width:992px){
+
+    .coa-form-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+/* ==========================
+   RESPONSIVE MOBILE
+========================== */
+
+@media(max-width:768px){
+
+    .page-header{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+    .header-actions{
+
+        width:100%;
+
+        display:grid;
+
+        grid-template-columns:
+        repeat(2,1fr);
+
+    }
+
+    .search-filter{
+
+        flex-direction:column;
+
+    }
+
+    .search-filter input,
+    .search-filter select{
+
+        width:100%;
+
+    }
+
+    .summary-value{
+
+        font-size:20px;
+
+    }
+
+    .table{
+
+        min-width:1000px;
+
+    }
+
+}

@@ -1,0 +1,413 @@
+<!-- ==========================================
+     HEADER
+========================================== -->
+
+<div class="card">
+
+    <div class="page-header">
+
+        <h3>
+            📒 JURNAL UMUM
+        </h3>
+
+        <div class="header-actions">
+
+            <button
+                class="btn btn-success"
+                onclick="addJurnalRow()">
+
+                ➕ Tambah Baris
+
+            </button>
+
+            <button
+                class="btn btn-primary"
+                onclick="saveJurnal()">
+
+                💾 Simpan
+
+            </button>
+
+            <button
+                class="btn btn-warning"
+                onclick="exportJurnalExcel()">
+
+                📤 Excel
+
+            </button>
+
+            <button
+                class="btn btn-danger"
+                onclick="exportJurnalPDF()">
+
+                📄 PDF
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ==========================================
+     HEADER TRANSAKSI
+========================================== -->
+
+<div class="card">
+
+    <div class="jurnal-header">
+
+        <div class="form-group">
+
+            <label class="form-label">
+                Tanggal
+            </label>
+
+            <input
+                type="date"
+                id="tanggalJurnal"
+                class="form-control">
+
+        </div>
+
+        <div class="form-group">
+
+            <label class="form-label">
+                No Bukti
+            </label>
+
+            <input
+    type="text"
+    id="noBukti"
+    class="form-control"
+    placeholder="Masukkan No Bukti">
+
+        </div>
+
+        <div class="form-group">
+
+            <label class="form-label">
+                Keterangan
+            </label>
+
+            <input
+                type="text"
+                id="keterangan"
+                class="form-control"
+                placeholder="Masukkan keterangan jurnal">
+
+        </div>
+
+        <div class="form-group">
+
+            <label class="form-label">
+                Status Balance
+            </label>
+
+            <div
+                id="statusBalance"
+                class="status-balance">
+
+                🔴 BELUM BALANCE
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ==========================================
+     SUMMARY
+========================================== -->
+
+<div class="jurnal-summary">
+
+    <div class="summary-card">
+
+        <div class="summary-title">
+
+            Total Baris
+
+        </div>
+
+        <div
+            class="summary-value"
+            id="summaryBaris">
+
+            0
+
+        </div>
+
+    </div>
+
+    <div class="summary-card">
+
+        <div class="summary-title">
+
+            Total Debit
+
+        </div>
+
+        <div
+            class="summary-value"
+            id="totalDebitCard">
+
+            Rp 0
+
+        </div>
+
+    </div>
+
+    <div class="summary-card">
+
+        <div class="summary-title">
+
+            Total Kredit
+
+        </div>
+
+        <div
+            class="summary-value"
+            id="totalKreditCard">
+
+            Rp 0
+
+        </div>
+
+    </div>
+
+    <div class="summary-card">
+
+        <div class="summary-title">
+
+            Status
+
+        </div>
+
+        <div
+            class="summary-value"
+            id="summaryStatus">
+
+            Tidak Balance
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ==========================================
+     DETAIL JURNAL
+========================================== -->
+
+<div class="card">
+
+    <h3 class="card-title">
+
+        Detail Jurnal
+
+    </h3>
+
+    <div class="table-responsive">
+
+        <table
+            class="table jurnal-table">
+
+            <thead>
+
+                <tr>
+
+                    <th width="15%">
+                        Kode Akun
+                    </th>
+
+                    <th width="35%">
+                        Nama Akun
+                    </th>
+
+                    <th width="20%">
+                        Debit
+                    </th>
+
+                    <th width="20%">
+                        Kredit
+                    </th>
+
+                    <th width="10%">
+                        Aksi
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="jurnalDetail">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="jurnal-total">
+
+        <div class="total-box">
+
+            <div class="total-label">
+
+                TOTAL DEBIT
+
+            </div>
+
+            <div
+                class="total-value total-debit"
+                id="totalDebit">
+
+                Rp 0
+
+            </div>
+
+        </div>
+
+        <div class="total-box">
+
+            <div class="total-label">
+
+                TOTAL KREDIT
+
+            </div>
+
+            <div
+                class="total-value total-kredit"
+                id="totalKredit">
+
+                Rp 0
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div
+        id="balanceInfo"
+        class="balance-status">
+
+        🔴 BELUM BALANCE
+
+    </div>
+
+</div>
+
+<!-- ==========================================
+     RIWAYAT JURNAL
+========================================== -->
+
+<div class="card">
+
+    <div class="page-header">
+
+        <h3>
+            📋 RIWAYAT JURNAL
+        </h3>
+
+    </div>
+
+    <!-- FILTER -->
+
+    <div class="search-filter">
+
+        <input
+            type="date"
+            id="tanggalAwal"
+            class="form-control">
+
+        <input
+            type="date"
+            id="tanggalAkhir"
+            class="form-control">
+
+        <input
+            type="text"
+            id="filterNoBukti"
+            class="form-control"
+            placeholder="No Bukti">
+
+        <select
+    id="filterNamaAkun"
+    class="form-control">
+
+    <option value="">
+        Semua Akun
+    </option>
+
+</select>
+
+        <input
+            type="text"
+            id="filterKeterangan"
+            class="form-control"
+            placeholder="Keterangan">
+
+        <button
+            class="btn btn-primary"
+            onclick="filterJurnal()">
+
+            🔍 Filter
+
+        </button>
+
+        <button
+            class="btn btn-secondary"
+            onclick="resetFilterJurnal()">
+
+            🔄 Reset
+
+        </button>
+
+    </div>
+
+    <!-- TABEL -->
+
+    <div class="table-responsive">
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Tanggal</th>
+
+                    <th>No Bukti</th>
+
+                    <th>Keterangan</th>
+
+                    <th>Kode Akun</th>
+
+                    <th>Nama Akun</th>
+
+                    <th>Debit</th>
+
+                    <th>Kredit</th>
+
+                    <th width="120">
+                        Aksi
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="jurnalHistory">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

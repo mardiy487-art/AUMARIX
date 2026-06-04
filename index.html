@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>AUMARIX Accounting System</title>
+
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/sidebar.css">
+<link rel="stylesheet" href="assets/css/dashboard.css">
+<link rel="stylesheet" href="assets/css/coa.css">
+<link rel="stylesheet" href="assets/css/jurnal.css">
+<link rel="stylesheet" href="assets/css/aset.css">
+<link rel="stylesheet" href="assets/css/bukubesar.css">
+<link rel="stylesheet" href="assets/css/neracalajur.css">
+<link rel="stylesheet" href="assets/css/labarugi.css">
+<link rel="stylesheet" href="assets/css/perubahanmodal.css">
+<link rel="stylesheet" href="assets/css/neraca.css">
+<link rel="stylesheet" href="assets/css/aruskas.css">
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+<div class="logo">
+
+<i class="fas fa-chart-line"></i>
+
+<h2>AUMARIX</h2>
+
+</div>
+
+<nav>
+
+<ul>
+
+<li>
+<a href="#"
+   onclick="loadPage('dashboard')">
+
+<i class="fas fa-gauge"></i>
+<span>Dashboard</span>
+
+</a>
+</li>
+
+<li>
+<a href="#"
+   onclick="loadPage('coa')">
+
+<i class="fas fa-list"></i>
+<span>Chart Of Accounts</span>
+
+</a>
+</li>
+
+<li>
+<a href="#"
+   onclick="loadPage('jurnal')">
+
+<i class="fas fa-book"></i>
+<span>Jurnal Umum</span>
+
+</a>
+</li>
+
+<li>
+<a href="#"
+   onclick="loadPage('penyesuaian')">
+
+<i class="fas fa-pen"></i>
+<span>Jurnal Penyesuaian</span>
+
+</a>
+</li>
+
+<li>
+<a href="#"
+   onclick="loadPage('aset')">
+
+<i class="fas fa-building"></i>
+<span>Aset Tetap</span>
+
+</a>
+</li>
+
+<li>
+<a href="#"
+   onclick="loadPage('bukubesar')">
+
+<i class="fas fa-book-open"></i>
+<span>Buku Besar</span>
+
+</a>
+</li>
+
+<li>
+<a href="#"
+   onclick="loadPage('neracalajur')">
+
+<i class="fas fa-table"></i>
+<span>Neraca Lajur</span>
+
+</a>
+</li>
+
+<li>
+<a href="#"
+   onclick="loadPage('labarugi')">
+
+<i class="fas fa-chart-column"></i>
+<span>Laba Rugi</span>
+
+</a>
+</li>
+
+<li>
+<a href="#"
+   onclick="loadPage('perubahanmodal')">
+
+<i class="fas fa-wallet"></i>
+<span>Perubahan Modal</span>
+
+</a>
+</li>
+
+<li>
+<a href="#"
+   onclick="loadPage('neraca')">
+
+<i class="fas fa-scale-balanced"></i>
+<span>Neraca</span>
+
+</a>
+</li>
+
+<li>
+<a href="#"
+   onclick="loadPage('aruskas')">
+
+<i class="fas fa-money-bill-wave"></i>
+<span>Arus Kas</span>
+
+</a>
+</li>
+
+</ul>
+
+</nav>
+
+</aside>
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="main">
+
+<header class="topbar">
+
+<div>
+
+<h1 id="pageTitle">
+Dashboard
+</h1>
+
+</div>
+
+<div class="user-box">
+
+<i class="fas fa-user-circle"></i>
+
+<span>Administrator</span>
+
+</div>
+
+</header>
+
+<main id="content">
+
+<div class="loading">
+
+<h2>Loading...</h2>
+
+</div>
+
+</main>
+
+</div>
+
+<!-- =========================
+     LOADING
+========================= -->
+
+<div id="globalLoading"
+     class="global-loading">
+
+<div class="spinner"></div>
+
+<p>Memproses...</p>
+
+</div>
+
+<!-- =========================
+     JS
+========================= -->
+
+<script src="assets/js/config.js"></script>
+
+<script src="assets/js/api.js"></script>
+
+<script src="assets/js/app.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+
+<script src="assets/js/coa.js"></script>
+
+<script src="assets/js/jurnal.js"></script>
+
+<script src="assets/js/penyesuaian.js"></script>
+
+<script src="assets/js/aset.js"></script>
+
+<script src="assets/js/bukubesar.js"></script>
+
+<script src="assets/js/neracalajur.js"></script>
+
+<script src="assets/js/labarugi.js"></script>
+
+<script src="assets/js/perubahanmodal.js"></script>
+
+<script src="assets/js/neraca.js"></script>
+
+<script src="assets/js/aruskas.js"></script>
+
+
+</body>
+
+</html>

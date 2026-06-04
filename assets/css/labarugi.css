@@ -1,0 +1,143 @@
+.lr-container{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.lr-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.lr-title{
+    margin:0;
+    font-size:24px;
+    font-weight:700;
+}
+
+.lr-subtitle{
+    margin-top:5px;
+    color:#777;
+}
+
+.lr-period{
+    background:#f5f7fa;
+    padding:10px 15px;
+    border-radius:8px;
+    font-weight:600;
+}
+
+.lr-summary{
+    display:grid;
+    grid-template-columns:
+    repeat(
+        auto-fit,
+        minmax(220px,1fr)
+    );
+    gap:15px;
+}
+
+.summary-card{
+    padding:20px;
+    border-radius:12px;
+    color:#fff;
+}
+
+.penjualan{
+    background:#10b981;
+}
+
+.kotor{
+    background:#3b82f6;
+}
+
+.beban{
+    background:#f59e0b;
+}
+
+.bersih{
+    background:#8b5cf6;
+}
+
+.summary-label{
+    font-size:13px;
+    opacity:.9;
+}
+
+.summary-value{
+    margin-top:10px;
+    font-size:24px;
+    font-weight:700;
+}
+
+.lr-content{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.lr-section{
+    background:#fff;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.section-header{
+    background:#f8fafc;
+    padding:15px;
+    font-weight:700;
+    border-bottom:1px solid #eee;
+}
+
+.lr-row{
+    display:flex;
+    justify-content:space-between;
+    padding:12px 15px;
+    border-bottom:1px solid #f1f1f1;
+}
+
+.lr-total{
+    display:flex;
+    justify-content:space-between;
+    padding:15px;
+    font-weight:700;
+    background:#f8fafc;
+}
+
+.lr-highlight{
+    display:flex;
+    justify-content:space-between;
+    padding:18px;
+    background:#dcfce7;
+    font-size:18px;
+    font-weight:700;
+    border-radius:12px;
+}
+
+.lr-final{
+    display:flex;
+    justify-content:space-between;
+    padding:20px;
+    background:#8b5cf6;
+    color:#fff;
+    font-size:22px;
+    font-weight:700;
+    border-radius:12px;
+}
+
+.loading-box{
+    text-align:center;
+    padding:40px;
+}
+
+.error-box{
+    color:red;
+    text-align:center;
+    padding:30px;
+}

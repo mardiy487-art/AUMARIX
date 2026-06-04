@@ -1,0 +1,178 @@
+<div class="card">
+
+    <h3 class="card-title">
+
+        📊 Neraca Lajur
+
+    </h3>
+
+    <!-- FILTER -->
+
+    <div class="neraca-toolbar">
+
+        <div class="form-group">
+
+            <label>
+
+                Dari Tanggal
+
+            </label>
+
+            <input
+                type="date"
+                id="tanggalAwalNeracaLajur"
+                class="form-control">
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+
+                Sampai Tanggal
+
+            </label>
+
+            <input
+                type="date"
+                id="tanggalAkhirNeracaLajur"
+                class="form-control">
+
+        </div>
+
+        <button
+            class="btn btn-primary"
+            onclick="loadNeracaLajur()">
+
+            🔍 Tampilkan
+
+        </button>
+
+        <button
+            class="btn btn-success"
+            onclick="loadNeracaLajur()">
+
+            🔄 Refresh
+
+        </button>
+
+        <button
+            class="btn btn-info"
+            onclick="exportNeracaLajurExcel()">
+
+            📊 Excel
+
+        </button>
+
+        <button
+            class="btn btn-danger"
+            onclick="exportNeracaLajurPDF()">
+
+            📄 PDF
+
+        </button>
+
+    </div>
+
+    <!-- TABEL -->
+
+    <div class="table-responsive">
+
+        <table
+            id="tblNeracaLajur"
+            class="neraca-lajur-table">
+
+            <thead>
+
+                <tr>
+
+                    <th rowspan="2">
+                        Kode Akun
+                    </th>
+
+                    <th rowspan="2">
+                        Nama Akun
+                    </th>
+
+                    <th colspan="2">
+                        Neraca Saldo
+                    </th>
+
+                    <th colspan="2">
+                        Penyesuaian
+                    </th>
+
+                    <th colspan="2">
+                        Saldo Setelah Penyesuaian
+                    </th>
+
+                    <th colspan="2">
+                        Laba Rugi
+                    </th>
+
+                    <th colspan="2">
+                        Neraca
+                    </th>
+
+                </tr>
+
+                <tr>
+
+                    <th>Debit</th>
+                    <th>Kredit</th>
+
+                    <th>Debit</th>
+                    <th>Kredit</th>
+
+                    <th>Debit</th>
+                    <th>Kredit</th>
+
+                    <th>Debit</th>
+                    <th>Kredit</th>
+
+                    <th>Debit</th>
+                    <th>Kredit</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="neracaLajurBody">
+
+                <tr>
+
+                    <td
+                        colspan="12"
+                        class="text-center">
+
+                        Memuat data...
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+            <tfoot id="neracaLajurFooter">
+
+            </tfoot>
+
+        </table>
+
+    </div>
+
+</div>
+
+<div class="card">
+
+    <h3 class="card-title">
+
+        ✅ Status Worksheet
+
+    </h3>
+
+    <div id="worksheetStatus">
+
+    </div>
+
+</div>

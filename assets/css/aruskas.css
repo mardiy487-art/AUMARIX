@@ -1,0 +1,85 @@
+.aruskas-page{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.cash-summary{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.summary-card{
+    background:white;
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.summary-title{
+    color:#64748b;
+    font-size:14px;
+}
+
+.summary-value{
+    margin-top:10px;
+    font-size:26px;
+    font-weight:700;
+}
+
+.cash-card{
+    background:white;
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.cash-card h3{
+    margin:0;
+    padding:18px;
+    background:#1e40af;
+    color:white;
+}
+
+.cash-row{
+    display:flex;
+    justify-content:space-between;
+    padding:14px 18px;
+    border-bottom:1px solid #f1f5f9;
+}
+
+.cash-row:hover{
+    background:#f8fafc;
+}
+
+.cash-in{
+    color:#16a34a;
+    font-weight:700;
+}
+
+.cash-out{
+    color:#dc2626;
+    font-weight:700;
+}
+
+.cash-total{
+    display:flex;
+    justify-content:space-between;
+    background:#0f172a;
+    color:white;
+    padding:18px;
+    font-weight:700;
+}
+
+@media(max-width:768px){
+
+    .cash-row{
+
+        flex-direction:column;
+        gap:5px;
+
+    }
+
+}

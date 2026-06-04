@@ -1,0 +1,386 @@
+<div class="card">
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <h3>
+            📒 Chart Of Accounts
+        </h3>
+
+        <div class="header-actions">
+
+            <button
+                class="btn btn-primary"
+                onclick="showCOAModal()">
+
+                ➕ Tambah Akun
+
+            </button>
+
+
+            <button
+                class="btn btn-warning"
+                onclick="exportCOAExcel()">
+
+                📤 Excel
+
+            </button>
+
+            <button
+                class="btn btn-danger"
+                onclick="exportCOAPDF()">
+
+                📄 PDF
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- SUMMARY -->
+
+    <div class="coa-summary">
+
+        <div class="summary-card">
+
+            <div class="summary-title">
+
+                Total Akun
+
+            </div>
+
+            <div
+                id="totalAkun"
+                class="summary-value">
+
+                0
+
+            </div>
+
+        </div>
+
+        <div class="summary-card">
+
+            <div class="summary-title">
+
+                Total Debit Awal
+
+            </div>
+
+            <div
+                id="totalDebitAwal"
+                class="summary-value">
+
+                Rp 0
+
+            </div>
+
+        </div>
+
+        <div class="summary-card">
+
+            <div class="summary-title">
+
+                Total Kredit Awal
+
+            </div>
+
+            <div
+                id="totalKreditAwal"
+                class="summary-value">
+
+                Rp 0
+
+            </div>
+
+        </div>
+
+        <div class="summary-card">
+
+            <div class="summary-title">
+
+                Status
+
+            </div>
+
+            <div
+                id="statusBalance"
+                class="summary-value">
+
+                -
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- SEARCH -->
+
+    <div class="search-filter">
+
+        <input
+            type="text"
+            id="searchCOA"
+            class="form-control"
+            placeholder="🔍 Cari kode akun atau nama akun..."
+            onkeyup="filterCOA()">
+
+        <select
+            id="filterKelompok"
+            class="form-control"
+            onchange="filterCOA()">
+
+            <option value="">
+                Semua Kelompok
+            </option>
+
+        </select>
+        </div>
+    </div>
+
+    <!-- TABLE -->
+
+    <div class="table-responsive">
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Kode Akun</th>
+
+                    <th>Nama Akun</th>
+
+                    <th>Kelompok Akun</th>
+
+                    <th>Pos Saldo</th>
+
+                    <th>Pos Laporan</th>
+
+                    <th class="text-right">
+
+                        Saldo Awal Debit
+
+                    </th>
+
+                    <th class="text-right">
+
+                        Saldo Awal Kredit
+
+                    </th>
+
+                    <th width="170">
+
+                        Aksi
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="coaTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- MODAL COA -->
+
+<div
+    class="modal"
+    id="coaModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h3 id="modalTitle">
+
+                Tambah COA
+
+            </h3>
+
+        </div>
+
+        <input
+            type="hidden"
+            id="editMode">
+
+        <!-- KODE AKUN -->
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                Kode Akun
+
+            </label>
+
+            <input
+                id="coaKode"
+                class="form-control">
+
+        </div>
+
+        <!-- NAMA AKUN -->
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                Nama Akun
+
+            </label>
+
+            <input
+                id="coaNama"
+                class="form-control">
+
+        </div>
+
+        <!-- KELOMPOK -->
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                Kelompok Akun
+
+            </label>
+
+            <input
+                id="coaKelompok"
+                class="form-control">
+
+        </div>
+
+        <!-- POS SALDO -->
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                Pos Saldo
+
+            </label>
+
+            <select
+                id="coaPosSaldo"
+                class="form-control">
+
+                <option value="DEBIT">
+
+                    DEBIT
+
+                </option>
+
+                <option value="KREDIT">
+
+                    KREDIT
+
+                </option>
+
+            </select>
+
+        </div>
+
+        <!-- POS LAPORAN -->
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                Pos Laporan
+
+            </label>
+
+            <select
+                id="coaPosLaporan"
+                class="form-control">
+
+                <option value="NERACA">
+
+                    NERACA
+
+                </option>
+
+                <option value="LABA_RUGI">
+
+                    LABA RUGI
+
+                </option>
+
+            </select>
+
+        </div>
+
+        <!-- DEBIT -->
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                Saldo Awal Debit
+
+            </label>
+
+            <input
+                type="number"
+                id="coaDebit"
+                class="form-control"
+                value="0">
+
+        </div>
+
+        <!-- KREDIT -->
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                Saldo Awal Kredit
+
+            </label>
+
+            <input
+                type="number"
+                id="coaKredit"
+                class="form-control"
+                value="0">
+
+        </div>
+
+        <!-- BUTTON -->
+
+        <div class="modal-footer">
+
+            <button
+                class="btn btn-success"
+                onclick="saveCOAData()">
+
+                💾 Simpan
+
+            </button>
+
+            <button
+                class="btn btn-danger"
+                onclick="closeCOAModal()">
+
+                ❌ Batal
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
