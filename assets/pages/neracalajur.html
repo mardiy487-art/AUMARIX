@@ -1,123 +1,146 @@
+<!-- ==========================================
+     AUMARIX ACCOUNTING SYSTEM
+     FILE : neracalajur.html
+========================================== -->
+
 <div class="card">
 
-    <h3 class="card-title">
+    <div class="page-header">
 
-        📊 Neraca Lajur
+        <div>
+            <h3>📊 Neraca Lajur</h3>
+            <p class="page-subtitle">
+                Worksheet akuntansi dari neraca saldo, penyesuaian, laba rugi, dan neraca
+            </p>
+        </div>
 
-    </h3>
+        <div class="header-actions">
 
-    <!-- FILTER -->
+            <button
+                type="button"
+                class="btn btn-primary"
+                onclick="loadNeracaLajur()">
+                🔍 Tampilkan
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-success"
+                onclick="resetNeracaLajur()">
+                🔄 Reset
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-warning"
+                onclick="exportNeracaLajurExcel()">
+                📊 Excel
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-danger"
+                onclick="exportNeracaLajurPDF()">
+                📄 PDF
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- FILTER -->
+<div class="card">
 
     <div class="neraca-toolbar">
 
         <div class="form-group">
-
-            <label>
-
+            <label class="form-label" for="tanggalAwalNeracaLajur">
                 Dari Tanggal
-
             </label>
 
             <input
                 type="date"
                 id="tanggalAwalNeracaLajur"
                 class="form-control">
-
         </div>
 
         <div class="form-group">
-
-            <label>
-
+            <label class="form-label" for="tanggalAkhirNeracaLajur">
                 Sampai Tanggal
-
             </label>
 
             <input
                 type="date"
                 id="tanggalAkhirNeracaLajur"
                 class="form-control">
-
         </div>
-
-        <button
-            class="btn btn-primary"
-            onclick="loadNeracaLajur()">
-
-            🔍 Tampilkan
-
-        </button>
-
-        <button
-            class="btn btn-success"
-            onclick="loadNeracaLajur()">
-
-            🔄 Refresh
-
-        </button>
-
-        <button
-            class="btn btn-info"
-            onclick="exportNeracaLajurExcel()">
-
-            📊 Excel
-
-        </button>
-
-        <button
-            class="btn btn-danger"
-            onclick="exportNeracaLajurPDF()">
-
-            📄 PDF
-
-        </button>
 
     </div>
 
-    <!-- TABEL -->
+</div>
 
-    <div class="table-responsive">
+<!-- SUMMARY -->
+<div class="summary-grid worksheet-summary">
+
+    <div class="summary-card">
+        <div class="summary-title">Jumlah Akun</div>
+        <div class="summary-value" id="nlJumlahAkun">0</div>
+    </div>
+
+    <div class="summary-card">
+        <div class="summary-title">Neraca Saldo</div>
+        <div class="summary-value" id="nlStatusNS">-</div>
+    </div>
+
+    <div class="summary-card">
+        <div class="summary-title">Penyesuaian</div>
+        <div class="summary-value" id="nlStatusAdj">-</div>
+    </div>
+
+    <div class="summary-card">
+        <div class="summary-title">Saldo Disesuaikan</div>
+        <div class="summary-value" id="nlStatusSAP">-</div>
+    </div>
+
+</div>
+
+<!-- TABEL NERACA LAJUR -->
+<div class="card">
+
+    <div class="section-header">
+
+        <div>
+            <h3 class="card-title">Tabel Neraca Lajur</h3>
+            <p class="page-subtitle">
+                Semua kolom worksheet ditampilkan lengkap sesuai standar akuntansi
+            </p>
+        </div>
+
+    </div>
+
+    <div class="table-responsive neraca-lajur-wrapper">
 
         <table
             id="tblNeracaLajur"
-            class="neraca-lajur-table">
+            class="table neraca-lajur-table">
 
             <thead>
 
                 <tr>
+                    <th rowspan="2">Kode Akun</th>
+                    <th rowspan="2">Nama Akun</th>
+                    <th rowspan="2">Kelompok</th>
 
-                    <th rowspan="2">
-                        Kode Akun
-                    </th>
-
-                    <th rowspan="2">
-                        Nama Akun
-                    </th>
-
-                    <th colspan="2">
-                        Neraca Saldo
-                    </th>
-
-                    <th colspan="2">
-                        Penyesuaian
-                    </th>
-
-                    <th colspan="2">
-                        Saldo Setelah Penyesuaian
-                    </th>
-
-                    <th colspan="2">
-                        Laba Rugi
-                    </th>
-
-                    <th colspan="2">
-                        Neraca
-                    </th>
-
+                    <th colspan="2">Neraca Saldo</th>
+                    <th colspan="2">Penyesuaian</th>
+                    <th colspan="2">Saldo Setelah Penyesuaian</th>
+                    <th colspan="2">Laba Rugi</th>
+                    <th colspan="2">Neraca</th>
                 </tr>
 
                 <tr>
-
                     <th>Debit</th>
                     <th>Kredit</th>
 
@@ -132,30 +155,19 @@
 
                     <th>Debit</th>
                     <th>Kredit</th>
-
                 </tr>
 
             </thead>
 
             <tbody id="neracaLajurBody">
-
                 <tr>
-
-                    <td
-                        colspan="12"
-                        class="text-center">
-
-                        Memuat data...
-
+                    <td colspan="13" class="empty-table">
+                        Memuat data neraca lajur...
                     </td>
-
                 </tr>
-
             </tbody>
 
-            <tfoot id="neracaLajurFooter">
-
-            </tfoot>
+            <tfoot id="neracaLajurFooter"></tfoot>
 
         </table>
 
@@ -163,16 +175,24 @@
 
 </div>
 
+<!-- STATUS WORKSHEET -->
 <div class="card">
 
-    <h3 class="card-title">
+    <div class="section-header">
 
-        ✅ Status Worksheet
+        <div>
+            <h3 class="card-title">✅ Status Worksheet</h3>
+            <p class="page-subtitle">
+                Validasi keseimbangan total debit dan kredit
+            </p>
+        </div>
 
-    </h3>
+    </div>
 
-    <div id="worksheetStatus">
-
+    <div id="worksheetStatus" class="worksheet-status-grid">
+        <div class="empty-table">
+            Status worksheet akan tampil setelah data dimuat.
+        </div>
     </div>
 
 </div>

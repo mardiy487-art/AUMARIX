@@ -1,115 +1,177 @@
+/* =====================================================
+   AUMARIX ACCOUNTING SYSTEM
+   FILE : app.js
+===================================================== */
+
+/* ==========================================
+   PAGE CONFIG
+========================================== */
+
+const PAGE_CONFIG = {
+
+    dashboard: {
+        title: "Dashboard",
+        init: "loadDashboard"
+    },
+
+    coa: {
+        title: "Chart of Accounts",
+        init: "loadCOA"
+    },
+
+    jurnal: {
+        title: "Jurnal Umum",
+        init: "loadJurnal"
+    },
+
+    bukubesar: {
+        title: "Buku Besar",
+        init: "initBukuBesar"
+    },
+
+    penyesuaian: {
+        title: "Jurnal Penyesuaian",
+        init: "loadPenyesuaian"
+    },
+
+    aset: {
+        title: "Aset Tetap",
+        init: "loadAset"
+    },
+
+    neracalajur: {
+        title: "Neraca Lajur",
+        init: "loadNeracaLajur"
+    },
+
+    labarugi: {
+        title: "Laba Rugi",
+        init: "loadLabaRugi"
+    },
+
+    perubahanmodal: {
+        title: "Perubahan Modal",
+        init: "loadPerubahanModal"
+    },
+
+    neraca: {
+        title: "Neraca",
+        init: "loadNeraca"
+    },
+
+    aruskas: {
+        title: "Arus Kas",
+        init: "loadArusKas"
+    }
+
+};
+
 /* ==========================================
    START APP
 ========================================== */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        loadPage("dashboard");
-
-    }
-);
+document.addEventListener("DOMContentLoaded", () => {
+    loadPage("dashboard");
+});
 
 /* ==========================================
    LOAD PAGE
 ========================================== */
 
 async function loadPage(page) {
-
     try {
+        showLoading();
 
-        const response =
-            await fetch(
-                `assets/pages/${page}.html`
-            );
+        const config = PAGE_CONFIG[page];
 
-        const html =
-            await response.text();
+        if (!config) {
+            throw new Error(`Konfigurasi halaman ${page} tidak ditemukan.`);
+        }
 
-        document
-            .getElementById("content")
-            .innerHTML = html;
+        const response = await fetch(
+            `assets/pages/${page}.html`,
+            { cache: "no-store" }
+        );
 
-        document
-            .getElementById("pageTitle")
-            .innerText =
-            page.toUpperCase();
+        if (!response.ok) {
+            throw new Error(`Halaman ${page}.html tidak ditemukan.`);
+        }
 
-        executePage(page);
+        const html = await response.text();
+
+        const content = document.getElementById("content");
+        if (!content) {
+            throw new Error("Element #content tidak ditemukan.");
+        }
+
+        content.innerHTML = html;
+
+        setPageTitle(config.title);
+        setActiveMenu(page);
+
+        await executePage(config.init);
 
     } catch (err) {
-
         console.error(err);
 
-        document
-            .getElementById("content")
-            .innerHTML =
+        const content = document.getElementById("content");
 
-            `
-            <div class="card">
-                <h3>Halaman tidak ditemukan</h3>
-            </div>
+        if (content) {
+            content.innerHTML = `
+                <div class="card">
+                    <h3>⚠️ Halaman tidak ditemukan</h3>
+                    <p>${escapeHTML(err.message || err)}</p>
+                </div>
             `;
+        }
 
+    } finally {
+        hideLoading();
     }
-
 }
 
 /* ==========================================
-   EXECUTE PAGE
+   EXECUTE PAGE INIT
 ========================================== */
 
-function executePage(page) {
+async function executePage(functionName) {
+    if (!functionName) return;
 
-    switch(page){
+    const fn = window[functionName];
 
-        case "dashboard":
-            loadDashboard();
-            break;
-
-        case "coa":
-            loadCOA();
-            break;
-
-        case "jurnal":
-            loadJurnal();
-            break;
-
-        case "penyesuaian":
-            loadPenyesuaian();
-            break;
-
-        case "aset":
-            loadAset();
-            break;
-
-        case "bukubesar":
-    initBukuBesar();
-    break;
-
-        case "neracalajur":
-            loadNeracaLajur();
-            break;
-
-        case "labarugi":
-            loadLabaRugi();
-            break;
-
-        case "perubahanmodal":
-            loadPerubahanModal();
-            break;
-
-        case "neraca":
-            loadNeraca();
-            break;
-
-        case "aruskas":
-            loadArusKas();
-            break;
-
+    if (typeof fn === "function") {
+        await fn();
+    } else {
+        console.warn(`Function ${functionName} belum tersedia.`);
     }
+}
 
+/* ==========================================
+   SET PAGE TITLE
+========================================== */
+
+function setPageTitle(title) {
+    const el = document.getElementById("pageTitle");
+
+    if (el) {
+        el.innerText = title || "";
+    }
+}
+
+/* ==========================================
+   ACTIVE MENU
+========================================== */
+
+function setActiveMenu(page) {
+    document
+        .querySelectorAll("[data-page]")
+        .forEach(item => {
+            item.classList.remove("active");
+
+            if (item.getAttribute("data-page") === page) {
+                item.classList.add("active");
+            }
+        });
 }
 
 /* ==========================================
@@ -117,33 +179,19 @@ function executePage(page) {
 ========================================== */
 
 function showLoading() {
+    const el = document.getElementById("globalLoading");
 
-    const el =
-        document.getElementById(
-            "globalLoading"
-        );
-
-    if(el){
-
+    if (el) {
         el.style.display = "flex";
-
     }
-
 }
 
 function hideLoading() {
+    const el = document.getElementById("globalLoading");
 
-    const el =
-        document.getElementById(
-            "globalLoading"
-        );
-
-    if(el){
-
+    if (el) {
         el.style.display = "none";
-
     }
-
 }
 
 /* ==========================================
@@ -151,68 +199,132 @@ function hideLoading() {
 ========================================== */
 
 function rupiah(value) {
-
-    return Number(value || 0)
-    .toLocaleString(
+    return Number(value || 0).toLocaleString(
         "id-ID",
         {
-            style:"currency",
-            currency:"IDR"
+            style: "currency",
+            currency: "IDR",
+            maximumFractionDigits: 0
         }
     );
-
 }
 
 /* ==========================================
    FORMAT ANGKA
 ========================================== */
 
-function numberFormat(value){
-
-    return Number(
-        value || 0
-    ).toLocaleString("id-ID");
-
+function numberFormat(value) {
+    return Number(value || 0).toLocaleString("id-ID");
 }
-
 
 /* ==========================================
    FORMAT TANGGAL
 ========================================== */
 
-function formatTanggal(value){
+function formatTanggal(value) {
+    if (!value) return "";
 
-    if(!value){
+    const date = new Date(value);
 
-        return "";
-
+    if (isNaN(date.getTime())) {
+        return value;
     }
 
-    return new Date(value)
-        .toLocaleDateString(
-            "id-ID",
-            {
-                day:"2-digit",
-                month:"2-digit",
-                year:"numeric"
-            }
-        );
-
+    return date.toLocaleDateString(
+        "id-ID",
+        {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        }
+    );
 }
 
+/* ==========================================
+   FORMAT DATE INPUT
+========================================== */
+
+function formatDateInput(value) {
+    if (!value) return "";
+
+    const date = new Date(value);
+
+    if (isNaN(date.getTime())) {
+        return "";
+    }
+
+    return date.toISOString().split("T")[0];
+}
+
+/* ==========================================
+   SAFE NUMBER
+========================================== */
+
+function toNumberClient(value) {
+    if (value === "" || value === null || value === undefined) {
+        return 0;
+    }
+
+    if (typeof value === "number") {
+        return value;
+    }
+
+    return Number(
+        String(value)
+            .replace(/\./g, "")
+            .replace(/,/g, ".")
+    ) || 0;
+}
+
+/* ==========================================
+   ESCAPE HTML
+========================================== */
+
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
 
 /* ==========================================
    NOTIFIKASI
 ========================================== */
 
-function success(message){
-
-    alert(message);
-
+function success(message) {
+    alert("✅ " + message);
 }
 
-function error(message){
+function error(message) {
+    alert("❌ " + message);
+}
 
-    alert(message);
+function warning(message) {
+    alert("⚠️ " + message);
+}
 
+function info(message) {
+    alert("ℹ️ " + message);
+}
+
+/* ==========================================
+   CONFIRMATION
+========================================== */
+
+function confirmAction(message) {
+    return confirm(message || "Apakah Anda yakin?");
+}
+
+/* ==========================================
+   RESET CONTENT
+========================================== */
+
+function clearContent() {
+    const content = document.getElementById("content");
+
+    if (content) {
+        content.innerHTML = "";
+    }
 }

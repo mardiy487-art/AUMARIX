@@ -1,442 +1,375 @@
 /* =====================================================
    AUMARIX ACCOUNTING SYSTEM
-   DASHBOARD.CSS
+   FILE : dashboard.css
 ===================================================== */
 
 /* ==========================
-   KPI GRID
+   PAGE
 ========================== */
 
-.kpi-grid{
+.dashboard-page{
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+}
 
-    display:grid;
+/* ==========================
+   HEADER
+========================== */
 
-    grid-template-columns:
-    repeat(auto-fit,minmax(250px,1fr));
+.dashboard-period{
+    margin-top:8px;
+    font-size:14px;
+    color:#64748b;
+    font-weight:600;
+}
 
-    gap:20px;
+/* ==========================
+   FILTER
+========================== */
 
-    margin-bottom:25px;
+.dashboard-filter{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    align-items:end;
+    background:#ffffff;
+    padding:20px;
+    border-radius:18px;
+    border:1px solid #e5e7eb;
+    box-shadow:0 8px 24px rgba(15,23,42,.06);
+}
 
+.dashboard-filter .form-group{
+    min-width:220px;
+}
+
+.dashboard-filter label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:700;
+    color:#334155;
+    font-size:14px;
 }
 
 /* ==========================
    KPI CARD
 ========================== */
 
-.kpi-card{
-
-    background:white;
-
-    border-radius:12px;
-
-    padding:20px;
-
-    box-shadow:
-    0 4px 20px
-    rgba(0,0,0,.05);
-
-    transition:.3s;
-
-    position:relative;
-
-    overflow:hidden;
-
-}
-
-.kpi-card:hover{
-
-    transform:
-    translateY(-3px);
-
-}
-
-/* ==========================
-   KPI COLOR
-========================== */
-
-.kpi-blue{
-
-    border-left:
-    5px solid #2563eb;
-
-}
-
-.kpi-green{
-
-    border-left:
-    5px solid #16a34a;
-
-}
-
-.kpi-red{
-
-    border-left:
-    5px solid #dc2626;
-
-}
-
-.kpi-yellow{
-
-    border-left:
-    5px solid #f59e0b;
-
-}
-
-/* ==========================
-   KPI TITLE
-========================== */
-
-.kpi-title{
-
-    font-size:13px;
-
-    color:#64748b;
-
-    margin-bottom:10px;
-
-    text-transform:uppercase;
-
-    letter-spacing:.5px;
-
-}
-
-/* ==========================
-   KPI VALUE
-========================== */
-
-.kpi-value{
-
-    font-size:28px;
-
-    font-weight:700;
-
-    color:#334155;
-
-}
-
-/* ==========================
-   KPI ICON
-========================== */
-
-.kpi-icon{
-
-    position:absolute;
-
-    right:15px;
-
-    top:15px;
-
-    font-size:35px;
-
-    opacity:.08;
-
-}
-
-/* ==========================
-   DASHBOARD ROW
-========================== */
-
-.dashboard-row{
-
+.dashboard-kpi-grid{
     display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:18px;
+}
 
-    grid-template-columns:
-    2fr 1fr;
+.dashboard-card{
+    background:linear-gradient(135deg,#ffffff,#f8fafc);
+    border-radius:18px;
+    padding:20px;
+    border:1px solid #e5e7eb;
+    border-left:5px solid #2563eb;
+    box-shadow:0 8px 24px rgba(15,23,42,.06);
+    transition:.25s ease;
+}
 
+.dashboard-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 14px 34px rgba(15,23,42,.10);
+}
+
+.dashboard-card-title{
+    color:#64748b;
+    font-size:13px;
+    margin-bottom:9px;
+    font-weight:700;
+}
+
+.dashboard-card-value{
+    font-size:24px;
+    font-weight:800;
+    color:#0f172a;
+}
+
+/* ==========================
+   KPI COLORS
+========================== */
+
+.dashboard-card.kas{
+    border-left-color:#16a34a;
+}
+
+.dashboard-card.laba{
+    border-left-color:#2563eb;
+}
+
+.dashboard-card.aktiva{
+    border-left-color:#0ea5e9;
+}
+
+.dashboard-card.passiva{
+    border-left-color:#f59e0b;
+}
+
+.dashboard-card.modal{
+    border-left-color:#8b5cf6;
+}
+
+.dashboard-card.transaksi{
+    border-left-color:#14b8a6;
+}
+
+.dashboard-card.akun{
+    border-left-color:#64748b;
+}
+
+.dashboard-card.status{
+    border-left-color:#22c55e;
+}
+
+/* ==========================
+   CHART
+========================== */
+
+.dashboard-chart-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
     gap:20px;
+}
 
-    margin-bottom:20px;
+.dashboard-chart-card{
+    background:#ffffff;
+    border-radius:18px;
+    border:1px solid #e5e7eb;
+    box-shadow:0 8px 24px rgba(15,23,42,.06);
+    overflow:hidden;
+}
 
+.dashboard-chart-card h3{
+    margin:0;
+    padding:18px 20px;
+    background:#1e40af;
+    color:#ffffff;
+    font-size:17px;
+    font-weight:800;
+}
+
+.chart-box{
+    position:relative;
+    height:330px;
+    padding:18px;
 }
 
 /* ==========================
-   SUMMARY CARD
+   SECTION CARD
 ========================== */
 
-.summary-card{
-
-    background:white;
-
-    border-radius:12px;
-
-    padding:20px;
-
-    box-shadow:
-    0 4px 20px
-    rgba(0,0,0,.05);
-
+.dashboard-section-card{
+    background:#ffffff;
+    border-radius:18px;
+    border:1px solid #e5e7eb;
+    box-shadow:0 8px 24px rgba(15,23,42,.06);
+    overflow:hidden;
 }
 
-.summary-card h3{
-
-    margin-bottom:15px;
-
+.dashboard-section-card h3{
+    margin:0;
+    padding:18px 20px;
+    background:#0f172a;
+    color:#ffffff;
+    font-size:17px;
+    font-weight:800;
 }
 
 /* ==========================
-   HEALTH CARD
+   CASH DETAIL
 ========================== */
 
-.health-card{
-
-    background:white;
-
-    border-radius:12px;
-
-    padding:20px;
-
-    box-shadow:
-    0 4px 20px
-    rgba(0,0,0,.05);
-
-}
-
-.health-card h3{
-
-    margin-bottom:15px;
-
-}
-
-/* ==========================
-   HEALTH ITEM
-========================== */
-
-.health-item{
-
+.dashboard-cash-row{
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
-    padding:10px 0;
-
-    border-bottom:
-    1px solid #e2e8f0;
-
+    gap:16px;
+    padding:15px 20px;
+    border-bottom:1px solid #f1f5f9;
+    transition:.2s ease;
 }
 
-.health-item:last-child{
+.dashboard-cash-row:hover{
+    background:#f8fafc;
+}
 
-    border-bottom:none;
+.dashboard-cash-row strong{
+    color:#0f172a;
+}
 
+.dashboard-cash-row small{
+    display:block;
+    margin-top:4px;
+    color:#64748b;
+    font-size:12px;
+}
+
+.dashboard-cash-row > div:last-child{
+    font-weight:800;
+    color:#16a34a;
+}
+
+.dashboard-cash-total{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 20px;
+    background:#0f172a;
+    color:#ffffff;
+    font-weight:800;
 }
 
 /* ==========================
-   DASHBOARD TABLE
+   TABLE
 ========================== */
+
+.table-responsive{
+    overflow:auto;
+}
 
 .dashboard-table{
-
     width:100%;
-
+    min-width:950px;
     border-collapse:collapse;
+}
 
+.dashboard-table thead{
+    background:#1e40af;
+    color:#ffffff;
 }
 
 .dashboard-table th{
-
-    background:#f8fafc;
-
-    padding:12px;
-
+    padding:14px;
+    font-size:13px;
+    font-weight:800;
     text-align:left;
-
+    white-space:nowrap;
 }
 
 .dashboard-table td{
-
-    padding:12px;
-
-    border-bottom:
-    1px solid #e2e8f0;
-
+    padding:13px 14px;
+    border-bottom:1px solid #e5e7eb;
+    color:#334155;
+    font-size:14px;
+    vertical-align:middle;
 }
 
-/* ==========================
-   CHART PLACEHOLDER
-========================== */
+.dashboard-table tbody tr:hover{
+    background:#f8fafc;
+}
 
-.chart-box{
+.text-right{
+    text-align:right;
+}
 
-    height:350px;
-
-    background:
-    linear-gradient(
-    135deg,
-    #eff6ff,
-    #ffffff
-    );
-
-    border-radius:12px;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
+.empty-table,
+.dashboard-empty{
+    padding:30px;
+    text-align:center;
     color:#94a3b8;
+    font-weight:700;
+}
 
-    font-size:18px;
+/* ==========================
+   LOADING / ERROR
+========================== */
 
+.loading-box{
+    padding:30px;
+    text-align:center;
+    color:#64748b;
     font-weight:600;
-
 }
 
-/* ==========================
-   SYSTEM INFO
-========================== */
-
-.system-info{
-
-    display:grid;
-
-    grid-template-columns:
-    repeat(auto-fit,minmax(200px,1fr));
-
-    gap:15px;
-
-}
-
-.info-box{
-
-    background:#f8fafc;
-
-    border-radius:10px;
-
-    padding:15px;
-
-}
-
-.info-title{
-
-    font-size:12px;
-
-    color:#64748b;
-
-    margin-bottom:8px;
-
-}
-
-.info-value{
-
-    font-size:20px;
-
-    font-weight:700;
-
-}
-
-/* ==========================
-   FINANCIAL SUMMARY
-========================== */
-
-.financial-summary{
-
-    display:grid;
-
-    grid-template-columns:
-    repeat(auto-fit,minmax(180px,1fr));
-
-    gap:15px;
-
-}
-
-.financial-item{
-
-    background:#f8fafc;
-
-    padding:15px;
-
-    border-radius:10px;
-
-}
-
-.financial-label{
-
-    font-size:12px;
-
-    color:#64748b;
-
-}
-
-.financial-value{
-
-    margin-top:8px;
-
-    font-size:20px;
-
-    font-weight:700;
-
-}
-
-/* ==========================
-   STATUS BOX
-========================== */
-
-.status-ok{
-
-    color:#16a34a;
-
-    font-weight:700;
-
-}
-
-.status-warning{
-
-    color:#f59e0b;
-
-    font-weight:700;
-
-}
-
-.status-error{
-
+.error-box{
+    padding:25px;
+    text-align:center;
     color:#dc2626;
-
     font-weight:700;
-
 }
 
 /* ==========================
-   RESPONSIVE TABLET
+   BUTTON SUPPORT
+========================== */
+
+.btn-secondary{
+    background:#64748b;
+    color:#ffffff;
+}
+
+/* ==========================
+   RESPONSIVE
 ========================== */
 
 @media(max-width:992px){
 
-    .dashboard-row{
+    .dashboard-chart-grid{
+        grid-template-columns:1fr;
+    }
 
-        grid-template-columns:
-        1fr;
-
+    .chart-box{
+        height:300px;
     }
 
 }
 
-/* ==========================
-   RESPONSIVE MOBILE
-========================== */
-
 @media(max-width:768px){
 
-    .kpi-grid{
-
-        grid-template-columns:
-        1fr;
-
+    .dashboard-filter{
+        flex-direction:column;
+        align-items:stretch;
     }
 
-    .kpi-value{
+    .dashboard-filter .form-group{
+        width:100%;
+        min-width:100%;
+    }
 
-        font-size:22px;
+    .dashboard-kpi-grid{
+        grid-template-columns:1fr;
+    }
 
+    .dashboard-card-value{
+        font-size:21px;
+    }
+
+    .dashboard-cash-row{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .dashboard-cash-total{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:6px;
+    }
+
+}
+
+@media(max-width:480px){
+
+    .dashboard-card{
+        padding:16px;
+    }
+
+    .dashboard-card-value{
+        font-size:20px;
+    }
+
+    .dashboard-chart-card h3,
+    .dashboard-section-card h3{
+        font-size:15px;
+        padding:15px;
     }
 
     .chart-box{
-
-        height:250px;
-
+        height:260px;
+        padding:12px;
     }
 
 }

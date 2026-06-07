@@ -1,0 +1,65 @@
+<div class="aset-page">
+
+    <div class="page-header">
+        <div>
+            <h2>Aset Tetap</h2>
+            <p>Kelola data aset tetap dan dasar perhitungan penyusutan.</p>
+        </div>
+        <div class="action-group">
+            <button class="btn btn-primary" onclick="showAsetForm()"><i class="fas fa-plus"></i> Tambah Aset</button>
+            <button class="btn" onclick="loadAset()"><i class="fas fa-rotate"></i> Refresh</button>
+        </div>
+    </div>
+
+    <div class="kpi-grid aset-summary">
+        <div class="kpi-card"><span>Jumlah Aset</span><h3 id="asetTotalUnit">0</h3></div>
+        <div class="kpi-card"><span>Harga Perolehan</span><h3 id="asetTotalPerolehan">Rp 0</h3></div>
+        <div class="kpi-card"><span>Nilai Residu</span><h3 id="asetTotalResidu">Rp 0</h3></div>
+        <div class="kpi-card"><span>Estimasi Penyusutan / Tahun</span><h3 id="asetTotalPenyusutan">Rp 0</h3></div>
+    </div>
+
+    <div class="card aset-form-card" id="asetFormCard" style="display:none;">
+        <h3 id="asetFormTitle">Tambah Aset Tetap</h3>
+        <input type="hidden" id="asetEditMode" value="false">
+        <div class="form-grid">
+            <label>Kode Aset<input id="kodeAset" type="text" placeholder="AST-001"></label>
+            <label>Nama Aset<input id="namaAset" type="text" placeholder="Laptop / Kendaraan"></label>
+            <label>Kode Akun<input id="kodeAkunAset" type="text" placeholder="Contoh: 12110"></label>
+            <label>Tanggal Perolehan<input id="tanggalPerolehan" type="date"></label>
+            <label>Harga Perolehan<input id="hargaPerolehan" type="number" min="0" value="0"></label>
+            <label>Nilai Residu<input id="nilaiResidu" type="number" min="0" value="0"></label>
+            <label>Umur Ekonomis (Tahun)<input id="umurEkonomis" type="number" min="1" value="1"></label>
+        </div>
+        <div class="action-group">
+            <button class="btn btn-primary" onclick="saveAset()">Simpan</button>
+            <button class="btn" onclick="hideAsetForm()">Batal</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="table-toolbar">
+            <input id="searchAset" type="search" placeholder="Cari kode/nama aset..." oninput="renderAsetTable()">
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Kode Aset</th>
+                        <th>Nama Aset</th>
+                        <th>Kode Akun</th>
+                        <th>Tanggal Perolehan</th>
+                        <th>Harga Perolehan</th>
+                        <th>Nilai Residu</th>
+                        <th>Umur</th>
+                        <th>Penyusutan/Tahun</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="asetTable">
+                    <tr><td colspan="9" class="text-center">Memuat data...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

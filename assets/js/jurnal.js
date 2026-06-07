@@ -1,40 +1,96 @@
 /* =====================================================
    AUMARIX ACCOUNTING SYSTEM
-   JURNAL.JS
+   FILE : jurnal-umum.js
 ===================================================== */
 
 let coaList = [];
 let jurnalRows = 0;
-
+let jurnalHistoryData = [];
 let editMode = false;
 let editNoBukti = "";
+
+/* ==========================
+   HELPER
+========================== */
+
+function getEl(id){
+    return document.getElementById(id);
+}
+
+function getVal(id){
+    return getEl(id)?.value?.trim() || "";
+}
+
+function setVal(id, value){
+    const el = getEl(id);
+    if(el) el.value = value ?? "";
+}
+
+function setHtml(id, value){
+    const el = getEl(id);
+    if(el) el.innerHTML = value;
+}
+
+function escapeHTML(value){
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function toNumberJurnal(value){
+    return Number(value || 0);
+}
+
+function rupiahJurnal(value){
+    if(typeof rupiah === "function"){
+        return rupiah(value);
+    }
+
+    if(typeof numberFormat === "function"){
+        return numberFormat(value);
+    }
+
+    return new Intl.NumberFormat("id-ID", {
+        style:"currency",
+        currency:"IDR",
+        maximumFractionDigits:0
+    }).format(Number(value || 0));
+}
+
+function formatTanggalJurnal(value){
+    if(!value) return "";
+
+    if(typeof formatTanggal === "function"){
+        return formatTanggal(value);
+    }
+
+    const d = new Date(value);
+
+    if(isNaN(d.getTime())){
+        return value;
+    }
+
+    return d.toLocaleDateString("id-ID");
+}
+
+function normalizeBackendRows(result){
+    return result?.data?.rows || result?.data || [];
+}
 
 /* ==========================
    LOAD HALAMAN
 ========================== */
 
 async function loadJurnal(){
-
     await loadCOAForJurnal();
-
     loadFilterNamaAkun();
 
-    addJurnalRow();
-
-    document
-    .getElementById(
-        "tanggalJurnal"
-    )
-    .value =
-
-    new Date()
-    .toISOString()
-    .split("T")[0];
-
-    await loadSummaryJurnal();
+    resetJurnalForm();
 
     await loadJurnalHistory();
-
 }
 
 /* ==========================
@@ -42,61 +98,67 @@ async function loadJurnal(){
 ========================== */
 
 async function loadCOAForJurnal(){
+    try{
+        const result = await apiGet("getCOA");
 
-    const result =
-        await apiGet(
-            "getCOA"
-        );
+        if(result.success){
+            coaList = normalizeBackendRows(result);
+        }else{
+            coaList = [];
+            alert(result.message || "Gagal mengambil data COA");
+        }
 
-    if(result.success){
-
-        coaList =
-            result.data || [];
-
+    }catch(err){
+        console.error(err);
+        alert("Gagal mengambil COA: " + err.message);
     }
-
 }
 
 function loadFilterNamaAkun(){
-
-    const select =
-        document.getElementById(
-            "filterNamaAkun"
-        );
-
+    const select = getEl("filterNamaAkun");
     if(!select) return;
 
-    select.innerHTML = `
-        <option value="">
-            Semua Akun
-        </option>
-    `;
+    select.innerHTML = `<option value="">Semua Akun</option>`;
 
-    const akunUnik =
+    const akunUnik = [
+        ...new Set(
+            coaList
+                .map(akun => akun["Nama Akun"])
+                .filter(Boolean)
+        )
+    ].sort();
 
-        [...new Set(
-
-            coaList.map(
-                akun =>
-                akun["Nama Akun"]
-            )
-
-        )];
-
-    akunUnik.sort();
-
-    akunUnik.forEach(nama=>{
-
+    akunUnik.forEach(nama => {
         select.innerHTML += `
-
-            <option value="${nama}">
-                ${nama}
+            <option value="${escapeHTML(nama)}">
+                ${escapeHTML(nama)}
             </option>
-
         `;
-
     });
+}
 
+/* ==========================
+   RESET FORM
+========================== */
+
+function resetJurnalForm(){
+    editMode = false;
+    editNoBukti = "";
+
+    setVal("editNoBukti", "");
+    setVal("tanggalJurnal", new Date().toISOString().split("T")[0]);
+    setVal("noBukti", "");
+    setVal("keterangan", "");
+
+    const tbody = getEl("jurnalDetail");
+    if(tbody) tbody.innerHTML = "";
+
+    jurnalRows = 0;
+
+    addJurnalRow();
+    addJurnalRow();
+
+    calculateBalance();
 }
 
 /* ==========================
@@ -104,119 +166,109 @@ function loadFilterNamaAkun(){
 ========================== */
 
 function addJurnalRow(){
-
     jurnalRows++;
 
-    const tbody =
-        document.getElementById(
-            "jurnalDetail"
-        );
+    const tbody = getEl("jurnalDetail");
+    if(!tbody) return;
 
-    const options =
-        coaList.map(a =>
+    const emptyRow = tbody.querySelector(".empty-table");
+    if(emptyRow){
+        tbody.innerHTML = "";
+    }
 
-            `<option value="${a["Kode Akun"]}">
-                ${a["Kode Akun"]} -
-                ${a["Nama Akun"]}
-            </option>`
+    const options = coaList.map(a => `
+        <option value="${escapeHTML(a["Kode Akun"])}">
+            ${escapeHTML(a["Kode Akun"])} - ${escapeHTML(a["Nama Akun"])}
+        </option>
+    `).join("");
 
-        ).join("");
-
-    tbody.insertAdjacentHTML(
-
-        "beforeend",
-
-        `
-        <tr id="row${jurnalRows}">
+    tbody.insertAdjacentHTML("beforeend", `
+        <tr id="row${jurnalRows}" class="jurnal-row">
 
             <td>
-
                 <select
-                    class="form-control"
-                    onchange="setNamaAkun(this,${jurnalRows})">
+                    class="form-control kode-akun"
+                    onchange="setNamaAkun(this, ${jurnalRows})">
 
-                    <option value="">
-                        Pilih Akun
-                    </option>
-
+                    <option value="">Pilih Akun</option>
                     ${options}
 
                 </select>
-
             </td>
 
             <td>
-
                 <input
                     type="text"
                     id="namaAkun${jurnalRows}"
-                    class="form-control"
+                    class="form-control nama-akun"
                     readonly>
-
             </td>
 
             <td>
-
                 <input
                     type="number"
                     value="0"
-                    class="form-control debit"
-                    oninput="calculateBalance()">
-
+                    min="0"
+                    class="form-control debit text-right"
+                    oninput="handleDebitKredit(this, 'debit')">
             </td>
 
             <td>
-
                 <input
                     type="number"
                     value="0"
-                    class="form-control kredit"
-                    oninput="calculateBalance()">
-
+                    min="0"
+                    class="form-control kredit text-right"
+                    oninput="handleDebitKredit(this, 'kredit')">
             </td>
 
             <td>
-
                 <button
-                    class="btn btn-danger"
+                    type="button"
+                    class="btn btn-danger btn-sm"
                     onclick="removeRow(${jurnalRows})">
-
-                    Hapus
-
+                    🗑
                 </button>
-
             </td>
 
         </tr>
-        `
+    `);
 
-    );
-
+    calculateBalance();
 }
 
 /* ==========================
    SET NAMA AKUN
 ========================== */
 
-function setNamaAkun(select,row){
+function setNamaAkun(select, row){
+    const akun = coaList.find(x =>
+        String(x["Kode Akun"]) === String(select.value)
+    );
 
-    const akun =
-        coaList.find(
+    setVal(`namaAkun${row}`, akun ? akun["Nama Akun"] : "");
+}
 
-            x =>
-            x["Kode Akun"] ==
-            select.value
+/* ==========================
+   DEBIT KREDIT
+========================== */
 
-        );
+function handleDebitKredit(input, type){
+    const row = input.closest("tr");
+    if(!row) return;
 
-    document.getElementById(
-        `namaAkun${row}`
-    ).value =
+    const debit = row.querySelector(".debit");
+    const kredit = row.querySelector(".kredit");
 
-    akun
-    ? akun["Nama Akun"]
-    : "";
+    if(type === "debit" && toNumberJurnal(input.value) > 0){
+        kredit.value = 0;
+    }
 
+    if(type === "kredit" && toNumberJurnal(input.value) > 0){
+        debit.value = 0;
+    }
+
+    calculateBalance();
 }
 
 /* ==========================
@@ -224,1020 +276,497 @@ function setNamaAkun(select,row){
 ========================== */
 
 function removeRow(row){
-
-    document
-    .getElementById(
-        `row${row}`
-    )
-    .remove();
+    const tr = getEl(`row${row}`);
+    if(tr) tr.remove();
 
     calculateBalance();
-
 }
 
 /* ==========================
-   HITUNG BALANCE
+   HITUNG BALANCE FORM INPUT
 ========================== */
 
 function calculateBalance(){
+    let totalDebit = 0;
+    let totalKredit = 0;
+    let totalBaris = 0;
 
+    document.querySelectorAll("#jurnalDetail tr.jurnal-row").forEach(row => {
+        totalBaris++;
+
+        totalDebit += toNumberJurnal(row.querySelector(".debit")?.value);
+        totalKredit += toNumberJurnal(row.querySelector(".kredit")?.value);
+    });
+
+    setHtml("totalDebit", rupiahJurnal(totalDebit));
+    setHtml("totalKredit", rupiahJurnal(totalKredit));
+
+    const balanced =
+        Math.abs(totalDebit - totalKredit) < 1 &&
+        totalDebit > 0;
+
+    if(balanced){
+        setHtml("balanceInfo", "🟢 BALANCE");
+        setHtml("statusBalance", "🟢 BALANCE");
+
+        getEl("balanceInfo")?.classList.remove("status-danger", "balance-error");
+        getEl("balanceInfo")?.classList.add("status-success", "balance-ok");
+
+        getEl("statusBalance")?.classList.remove("status-danger", "balance-error");
+        getEl("statusBalance")?.classList.add("status-success", "balance-ok");
+    }else{
+        setHtml("balanceInfo", "🔴 TIDAK BALANCE");
+        setHtml("statusBalance", "🔴 TIDAK BALANCE");
+
+        getEl("balanceInfo")?.classList.remove("status-success", "balance-ok");
+        getEl("balanceInfo")?.classList.add("status-danger", "balance-error");
+
+        getEl("statusBalance")?.classList.remove("status-success", "balance-ok");
+        getEl("statusBalance")?.classList.add("status-danger", "balance-error");
+    }
+
+    return {
+        totalDebit,
+        totalKredit,
+        balanced,
+        totalBaris
+    };
+}
+
+/* ==========================
+   SUMMARY RIWAYAT/FILTER
+========================== */
+
+function updateSummaryFromData(data){
     let totalDebit = 0;
     let totalKredit = 0;
 
-    document
-    .querySelectorAll(".debit")
-    .forEach(el=>{
-
-        totalDebit +=
-        Number(
-            el.value || 0
-        );
-
+    data.forEach(row => {
+        totalDebit += toNumberJurnal(row["Debit"]);
+        totalKredit += toNumberJurnal(row["Kredit"]);
     });
 
-    document
-    .querySelectorAll(".kredit")
-    .forEach(el=>{
+    setHtml("summaryBaris", data.length);
+    setHtml("totalDebitCard", rupiahJurnal(totalDebit));
+    setHtml("totalKreditCard", rupiahJurnal(totalKredit));
 
-        totalKredit +=
-        Number(
-            el.value || 0
-        );
-
-    });
-
-    document
-    .getElementById(
-        "totalDebit"
-    )
-    .innerText =
-    rupiah(totalDebit);
-
-    document
-    .getElementById(
-        "totalKredit"
-    )
-    .innerText =
-    rupiah(totalKredit);
-
-    const status =
-        document.getElementById(
-            "balanceInfo"
-        );
-
-    const statusField =
-        document.getElementById(
-            "statusBalance"
-        );
-
- if(
-
-    Math.abs(
-        totalDebit -
-        totalKredit
-    ) < 1
-
-    &&
-
-    totalDebit > 0
-
-)
-    {
-
-        status.innerHTML =
-        "🟢 BALANCE";
-
-        status.className =
-        "balance-status balance-ok";
-
-        statusField.innerHTML =
-        "🟢 BALANCE";
-
+    if(Math.abs(totalDebit - totalKredit) < 1){
+        setHtml("summaryStatus", "🟢 Balance");
+    }else{
+        setHtml("summaryStatus", "🔴 Tidak Balance");
     }
-
-    else{
-
-        status.innerHTML =
-        "🔴 TIDAK BALANCE";
-
-        status.className =
-        "balance-status balance-error";
-
-        statusField.innerHTML =
-        "🔴 TIDAK BALANCE";
-
-
-    }
-
 }
+
 /* ==========================
-   SIMPAN JURNAL
+   AMBIL DETAIL FORM
 ========================== */
+
+function getJurnalDetailFromForm(){
+    const rows = document.querySelectorAll("#jurnalDetail tr.jurnal-row");
+
+    if(rows.length < 2){
+        throw new Error("Minimal 2 baris jurnal");
+    }
+
+    const detail = [];
+
+    rows.forEach(row => {
+        const kodeAkun = row.querySelector(".kode-akun")?.value || "";
+        const namaAkun = row.querySelector(".nama-akun")?.value || "";
+        const debit = toNumberJurnal(row.querySelector(".debit")?.value);
+        const kredit = toNumberJurnal(row.querySelector(".kredit")?.value);
+
+        if(!kodeAkun){
+            throw new Error("Masih ada akun yang belum dipilih");
+        }
+
+        if(debit > 0 && kredit > 0){
+            throw new Error("Satu baris tidak boleh berisi debit dan kredit sekaligus");
+        }
+
+        if(debit === 0 && kredit === 0){
+            throw new Error("Setiap baris harus memiliki nilai debit atau kredit");
+        }
+
+        detail.push({
+            kodeAkun,
+            namaAkun,
+            debit,
+            kredit
+        });
+    });
+
+    return detail;
+}
 
 /* ==========================
    SIMPAN JURNAL
 ========================== */
 
 async function saveJurnal(){
-
     try{
+        const tanggal = getVal("tanggalJurnal");
+        const noBukti = getVal("noBukti");
+        const keterangan = getVal("keterangan");
 
-        const rows =
-            document.querySelectorAll(
-                "#jurnalDetail tr"
-            );
-
-        if(rows.length === 0){
-
-            alert(
-                "Detail jurnal kosong"
-            );
-
+        if(!tanggal){
+            alert("Tanggal wajib diisi");
             return;
-
         }
 
-        const detail = [];
+        if(!noBukti){
+            alert("No Bukti wajib diisi");
+            return;
+        }
 
-        let totalDebit = 0;
-        let totalKredit = 0;
+        if(!keterangan){
+            alert("Keterangan wajib diisi");
+            return;
+        }
 
-        rows.forEach(row=>{
+        const detail = getJurnalDetailFromForm();
+        const balance = calculateBalance();
 
-            const select =
-                row.querySelector(
-                    "select"
-                );
+        if(!balance.balanced){
+            alert("Debit dan Kredit harus balance");
+            return;
+        }
 
-            const nama =
-                row.querySelector(
-                    'input[readonly]'
-                );
+        const data = {
+            tanggal,
+            noBukti,
+            keterangan,
+            detail
+        };
 
-            const debit =
-                row.querySelector(
-                    ".debit"
-                );
+        const action = editMode ? "updateJurnalUmum" : "saveJurnalUmum";
 
-            const kredit =
-                row.querySelector(
-                    ".kredit"
-                );
-
-            const kodeAkun =
-                select
-                ? select.value
-                : "";
-
-            if(!kodeAkun){
-
-                throw new Error(
-                    "Masih ada akun yang belum dipilih"
-                );
-
+        const payload = editMode
+            ? {
+                ...data,
+                noBukti: editNoBukti || noBukti
             }
+            : data;
 
-            const item = {
+        const result = await apiPost(action, payload);
 
-                kodeAkun:
-                    kodeAkun,
-
-                namaAkun:
-                    nama.value,
-
-                debit:
-                    Number(
-                        debit.value || 0
-                    ),
-
-                kredit:
-                    Number(
-                        kredit.value || 0
-                    )
-
-            };
-
-            totalDebit +=
-                item.debit;
-
-            totalKredit +=
-                item.kredit;
-
-            detail.push(item);
-
-        });
-
-   if(
-    Math.abs(
-        totalDebit -
-        totalKredit
-    ) >= 1
-){
-
-    alert(
-        "Debit dan Kredit harus balance"
-    );
-
-    return;
-
-}
-
-        const noBukti =
-
-    document
-    .getElementById(
-        "noBukti"
-    )
-    .value
-    .trim();
-
-if(!noBukti){
-
-    alert(
-        "No Bukti wajib diisi"
-    );
-
-    return;
-
-}
-
-const data = {
-
-    tanggal:
-    document.getElementById(
-        "tanggalJurnal"
-    ).value,
-
-    noBukti:
-    noBukti,
-
-    keterangan:
-    document.getElementById(
-        "keterangan"
-    ).value,
-
-    detail:
-    detail
-
-};
-
-
-        console.log(
-            "DATA KIRIM",
-            data
-        );
-
-        const action =
-
-    editMode
-
-    ?
-
-    "updateJurnalUmum"
-
-    :
-
-    "saveJurnalUmum";
-
-const result =
-
-    await apiPost(
-        action,
-        data
-    );
-
-      if(result.success){
-
-    editMode = false;
-
-    editNoBukti = "";
-
-    alert(
-        "✅ Jurnal berhasil disimpan"
-    );
-
-    document
-    .getElementById(
-        "jurnalDetail"
-    )
-    .innerHTML = "";
-
-    document
-    .getElementById(
-        "noBukti"
-    )
-    .value = "";
-
-    document
-    .getElementById(
-        "keterangan"
-    )
-    .value = "";
-
-    jurnalRows = 0;
-
-    addJurnalRow();
-
-    calculateBalance();
-
-    await loadSummaryJurnal();
-
-    await loadJurnalHistory();
-
-}
-        else{
-
+        if(result.success){
             alert(
-                "❌ " +
-                result.message
+                editMode
+                    ? "✅ Jurnal berhasil diperbarui"
+                    : "✅ Jurnal berhasil disimpan"
             );
 
+            resetJurnalForm();
+            await loadJurnalHistory();
+
+        }else{
+            alert("❌ " + (result.message || "Gagal menyimpan jurnal"));
         }
 
     }catch(err){
-
-        alert(
-            "❌ " +
-            err.message
-        );
-
         console.error(err);
-
+        alert("❌ " + err.message);
     }
-
 }
 
 /* ==========================
-   HISTORY
+   LOAD HISTORY
 ========================== */
 
 async function loadJurnalHistory(){
+    try{
+        const result = await apiGet("getJurnalUmum");
 
-    const result =
-        await apiGet(
-            "getJurnalUmum"
-        );
+        if(!result.success){
+            alert(result.message || "Gagal mengambil jurnal umum");
+            return;
+        }
 
-    if(!result.success)
-        return;
+        jurnalHistoryData = normalizeBackendRows(result);
 
-    const tbody =
-        document.getElementById(
-            "jurnalHistory"
-        );
+        renderJurnalHistory(jurnalHistoryData);
+        updateSummaryFromData(jurnalHistoryData);
 
-    tbody.innerHTML = "";
+    }catch(err){
+        console.error(err);
+        alert("Gagal mengambil riwayat jurnal: " + err.message);
+    }
+}
 
-    result.data.forEach(row=>{
+function renderJurnalHistory(data){
+    const tbody = getEl("jurnalHistory");
+    if(!tbody) return;
 
-        tbody.innerHTML += `
-
-        <tr>
-
-            <td>
-    ${formatTanggal(
-        row["Tanggal"]
-    )}
-</td>
-
-            <td>${row["No. Bukti"]}</td>
-
-            <td>${row["Keterangan"]}</td>
-
-            <td>${row["Kode Akun"]}</td>
-
-            <td>${row["Nama Akun"]}</td>
-
-            <td class="text-right">
-                ${numberFormat(row["Debit"])}
-            </td>
-
-            <td class="text-right">
-    ${numberFormat(row["Kredit"])}
-</td>
-
-<td>
-
-    <button
-        class="btn btn-warning btn-sm"
-        onclick="editJurnal(
-            '${row["No. Bukti"]}'
-        )">
-
-        ✏️
-
-    </button>
-
-    <button
-        class="btn btn-danger btn-sm"
-        onclick="deleteJurnal(
-            '${row["No. Bukti"]}'
-        )">
-
-        🗑️
-
-    </button>
-
-</td>
-
-        </tr>
-
+    if(!data.length){
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8" class="empty-table">
+                    Data jurnal belum ada
+                </td>
+            </tr>
         `;
-
-    });
-
-}
-
-async function loadSummaryJurnal(){
-
-    const result =
-        await apiGet(
-            "getJurnalUmum"
-        );
-
-    if(!result.success)
-        return;
-
-    let totalDebit = 0;
-    let totalKredit = 0;
-
-    result.data.forEach(row=>{
-
-        totalDebit +=
-        Number(
-            row["Debit"] || 0
-        );
-
-        totalKredit +=
-        Number(
-            row["Kredit"] || 0
-        );
-
-    });
-
-    document
-    .getElementById(
-        "totalDebitCard"
-    )
-    .innerText =
-    rupiah(totalDebit);
-
-    document
-    .getElementById(
-        "totalKreditCard"
-    )
-    .innerText =
-    rupiah(totalKredit);
-
-    document
-.getElementById(
-    "summaryBaris"
-)
-.innerText =
-result.data.length;
-
-const summaryStatus =
-
-    document.getElementById(
-        "summaryStatus"
-    );
-
-if(
-    Math.abs(
-        totalDebit -
-        totalKredit
-    ) < 1
-){
-
-    summaryStatus.innerHTML =
-        "🟢 Balance";
-
-}
-else{
-
-    summaryStatus.innerHTML =
-        "🔴 Tidak Balance";
-
-}
-}
-
-
-
-async function deleteJurnal(
-    noBukti
-){
-
-    if(
-        !confirm(
-            "Hapus jurnal ini?"
-        )
-    ){
         return;
     }
 
-    const result =
-        await apiPost(
+    tbody.innerHTML = data.map(row => {
+        const noBukti = escapeHTML(row["No. Bukti"]);
 
-            "deleteJurnalUmum",
+        return `
+            <tr>
+                <td>${formatTanggalJurnal(row["Tanggal"])}</td>
+                <td>${noBukti}</td>
+                <td>${escapeHTML(row["Keterangan"])}</td>
+                <td>${escapeHTML(row["Kode Akun"])}</td>
+                <td>${escapeHTML(row["Nama Akun"])}</td>
+                <td class="text-right">${rupiahJurnal(row["Debit"])}</td>
+                <td class="text-right">${rupiahJurnal(row["Kredit"])}</td>
+                <td class="table-actions">
+                    <button
+                        type="button"
+                        class="btn btn-warning btn-sm"
+                        onclick="editJurnal('${noBukti}')">
+                        ✏️
+                    </button>
 
-            {
-                noBukti
-            }
-
-        );
-
-   if(result.success){
-
-    alert(
-        "Jurnal berhasil dihapus"
-    );
-
-    await loadSummaryJurnal();
-
-    await loadJurnalHistory();
-
+                    <button
+                        type="button"
+                        class="btn btn-danger btn-sm"
+                        onclick="deleteJurnal('${noBukti}')">
+                        🗑️
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join("");
 }
-    else{
 
-        alert(
-            result.message
-        );
+/* ==========================
+   DELETE JURNAL
+========================== */
 
+async function deleteJurnal(noBukti){
+    if(!confirm(`Hapus jurnal ${noBukti}?`)) return;
+
+    try{
+        const result = await apiPost("deleteJurnalUmum", {
+            noBukti: noBukti
+        });
+
+        if(result.success){
+            alert("✅ Jurnal berhasil dihapus");
+            await loadJurnalHistory();
+        }else{
+            alert("❌ " + (result.message || "Gagal menghapus jurnal"));
+        }
+
+    }catch(err){
+        console.error(err);
+        alert("❌ " + err.message);
     }
-
 }
 
-async function editJurnal(
-    noBukti
-){
+/* ==========================
+   EDIT JURNAL
+========================== */
 
-    const result =
-        await apiGet(
-            "getJurnalUmum"
+async function editJurnal(noBukti){
+    try{
+        const result = await apiGet("getJurnalUmum");
+
+        if(!result.success) return;
+
+        const data = normalizeBackendRows(result).filter(row =>
+            String(row["No. Bukti"]) === String(noBukti)
         );
 
-    if(!result.success)
-        return;
+        if(data.length === 0){
+            alert("Data jurnal tidak ditemukan");
+            return;
+        }
 
-    const data =
+        editMode = true;
+        editNoBukti = noBukti;
 
-        result.data.filter(
+        setVal("editNoBukti", noBukti);
+        setVal("noBukti", noBukti);
+        setVal("keterangan", data[0]["Keterangan"]);
 
-            x =>
-            x["No. Bukti"] ===
-            noBukti
+        const d = new Date(data[0]["Tanggal"]);
+        if(!isNaN(d.getTime())){
+            setVal("tanggalJurnal", d.toISOString().split("T")[0]);
+        }
 
-        );
+        const tbody = getEl("jurnalDetail");
+        if(tbody) tbody.innerHTML = "";
 
-    if(data.length === 0)
-        return;
+        jurnalRows = 0;
 
-    editMode = true;
+        data.forEach(item => {
+            addJurnalRow();
 
-    editNoBukti = noBukti;
+            const row = jurnalRows;
+            const select = document.querySelector(`#row${row} .kode-akun`);
 
-    document
-    .getElementById(
-        "tanggalJurnal"
-    )
-    .value =
-    new Date(
-        data[0]["Tanggal"]
-    )
-    .toISOString()
-    .split("T")[0];
+            select.value = item["Kode Akun"];
+            setNamaAkun(select, row);
 
-    document
-    .getElementById(
-        "noBukti"
-    )
-    .value =
-    noBukti;
+            document.querySelector(`#row${row} .debit`).value =
+                toNumberJurnal(item["Debit"]);
 
-    document
-    .getElementById(
-        "keterangan"
-    )
-    .value =
-    data[0]["Keterangan"];
+            document.querySelector(`#row${row} .kredit`).value =
+                toNumberJurnal(item["Kredit"]);
+        });
 
-    document
-    .getElementById(
-        "jurnalDetail"
-    )
-    .innerHTML = "";
+        calculateBalance();
 
-    jurnalRows = 0;
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
 
-    data.forEach(item=>{
-
-        addJurnalRow();
-
-        const row =
-            jurnalRows;
-
-        const select =
-            document.querySelector(
-                `#row${row} select`
-            );
-
-        select.value =
-            item["Kode Akun"];
-
-        setNamaAkun(
-            select,
-            row
-        );
-
-        document
-        .querySelector(
-            `#row${row} .debit`
-        )
-        .value =
-        item["Debit"];
-
-        document
-        .querySelector(
-            `#row${row} .kredit`
-        )
-        .value =
-        item["Kredit"];
-
-    });
-
-    calculateBalance();
-
-    window.scrollTo({
-
-        top:0,
-
-        behavior:"smooth"
-
-    });
-
+    }catch(err){
+        console.error(err);
+        alert("❌ " + err.message);
+    }
 }
+
+/* ==========================
+   FILTER JURNAL
+========================== */
 
 function filterJurnal(){
+    const tglAwal = getVal("tanggalAwal");
+    const tglAkhir = getVal("tanggalAkhir");
+    const noBukti = getVal("filterNoBukti").toLowerCase();
+    const namaAkun = getVal("filterNamaAkun").toLowerCase();
+    const keterangan = getVal("filterKeterangan").toLowerCase();
 
-    const tglAwal =
-        document
-        .getElementById(
-            "tanggalAwal"
-        )
-        .value;
+    let data = [...jurnalHistoryData];
 
-    const tglAkhir =
-        document
-        .getElementById(
-            "tanggalAkhir"
-        )
-        .value;
+    if(tglAwal){
+        data = data.filter(row =>
+            new Date(row["Tanggal"]) >= new Date(tglAwal)
+        );
+    }
 
-    const keywordNoBukti =
-        document
-        .getElementById(
-            "filterNoBukti"
-        )
-        .value
-        .toLowerCase();
+    if(tglAkhir){
+        data = data.filter(row =>
+            new Date(row["Tanggal"]) <= new Date(tglAkhir)
+        );
+    }
 
-    const keywordNama =
-        document
-        .getElementById(
-            "filterNamaAkun"
-        )
-        .value
-        .toLowerCase();
+    if(noBukti){
+        data = data.filter(row =>
+            String(row["No. Bukti"] || "")
+                .toLowerCase()
+                .includes(noBukti)
+        );
+    }
 
-    const keywordKet =
-        document
-        .getElementById(
-            "filterKeterangan"
-        )
-        .value
-        .toLowerCase();
+    if(namaAkun){
+        data = data.filter(row =>
+            String(row["Nama Akun"] || "")
+                .toLowerCase() === namaAkun
+        );
+    }
 
-    document
-    .querySelectorAll(
-        "#jurnalHistory tr"
-    )
-    .forEach(tr=>{
+    if(keterangan){
+        data = data.filter(row =>
+            String(row["Keterangan"] || "")
+                .toLowerCase()
+                .includes(keterangan)
+        );
+    }
 
-        const tanggal =
-            tr.cells[0]
-            .innerText;
-
-        const text =
-            tr.innerText
-            .toLowerCase();
-
-        let tampil = true;
-
-        if(keywordNoBukti){
-
-            tampil =
-            tampil &&
-            text.includes(
-                keywordNoBukti
-            );
-
-        }
-
-        if(keywordNama){
-
-            tampil =
-            tampil &&
-            text.includes(
-                keywordNama
-            );
-
-        }
-
-        if(keywordKet){
-
-            tampil =
-            tampil &&
-            text.includes(
-                keywordKet
-            );
-
-        }
-
-        if(tglAwal || tglAkhir){
-
-            const parts =
-                tanggal.split("/");
-
-            const rowDate =
-                new Date(
-                    parts[2],
-                    parts[1]-1,
-                    parts[0]
-                );
-
-            if(tglAwal){
-
-                tampil =
-                tampil &&
-                rowDate >=
-                new Date(tglAwal);
-
-            }
-
-            if(tglAkhir){
-
-                tampil =
-                tampil &&
-                rowDate <=
-                new Date(tglAkhir);
-
-            }
-
-        }
-
-        tr.style.display =
-            tampil
-            ? ""
-            : "none";
-
-    });
-
+    renderJurnalHistory(data);
+    updateSummaryFromData(data);
 }
+
+/* ==========================
+   RESET FILTER
+========================== */
 
 function resetFilterJurnal(){
+    setVal("tanggalAwal", "");
+    setVal("tanggalAkhir", "");
+    setVal("filterNoBukti", "");
+    setVal("filterNamaAkun", "");
+    setVal("filterKeterangan", "");
 
-    document
-    .getElementById(
-        "filterNoBukti"
-    )
-    .value = "";
-
-    document
-    .getElementById(
-        "filterNamaAkun"
-    )
-    .value = "";
-
-    document
-    .getElementById(
-        "filterKeterangan"
-    )
-    .value = "";
-
-    document
-    .querySelectorAll(
-        "#jurnalHistory tr"
-    )
-    .forEach(tr=>{
-
-        tr.style.display = "";
-
-    });
-
-    document
-.getElementById(
-    "tanggalAwal"
-)
-.value = "";
-
-document
-.getElementById(
-    "tanggalAkhir"
-)
-.value = "";
-
+    renderJurnalHistory(jurnalHistoryData);
+    updateSummaryFromData(jurnalHistoryData);
 }
 
-async function exportJurnalExcel(){
+/* ==========================
+   EXPORT EXCEL
+========================== */
 
-    const result =
-        await apiGet(
-            "getJurnalUmum"
-        );
+function exportJurnalExcel(){
+    const data = jurnalHistoryData;
 
-    if(!result.success){
-
-        alert(
-            "Data jurnal tidak ditemukan"
-        );
-
+    if(!data.length){
+        alert("Data jurnal kosong");
         return;
-
     }
 
-    const data =
+    const rows = data.map(row => ({
+        "Tanggal": formatTanggalJurnal(row["Tanggal"]),
+        "No Bukti": row["No. Bukti"],
+        "Keterangan": row["Keterangan"],
+        "Kode Akun": row["Kode Akun"],
+        "Nama Akun": row["Nama Akun"],
+        "Debit": toNumberJurnal(row["Debit"]),
+        "Kredit": toNumberJurnal(row["Kredit"])
+    }));
 
-        result.data.map(row=>({
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(rows);
 
-            "Tanggal":
-            formatTanggal(
-                row["Tanggal"]
-            ),
-
-            "No Bukti":
-            row["No. Bukti"],
-
-            "Keterangan":
-            row["Keterangan"],
-
-            "Kode Akun":
-            row["Kode Akun"],
-
-            "Nama Akun":
-            row["Nama Akun"],
-
-            "Debit":
-            Number(
-                row["Debit"] || 0
-            ),
-
-            "Kredit":
-            Number(
-                row["Kredit"] || 0
-            )
-
-        }));
-
-    const wb =
-        XLSX.utils.book_new();
-
-    const ws =
-        XLSX.utils.json_to_sheet(
-            data
-        );
-
-    XLSX.utils.book_append_sheet(
-
-        wb,
-
-        ws,
-
-        "Jurnal Umum"
-
-    );
+    XLSX.utils.book_append_sheet(wb, ws, "Jurnal Umum");
 
     XLSX.writeFile(
-
         wb,
-
-        `JurnalUmum_${
-            new Date()
-            .toISOString()
-            .slice(0,10)
-        }.xlsx`
-
+        `JurnalUmum_${new Date().toISOString().slice(0,10)}.xlsx`
     );
-    const range =
-
-    XLSX.utils.decode_range(
-        ws["!ref"]
-    );
-
-for(
-
-    let R = 1;
-
-    R <= range.e.r;
-
-    ++R
-
-){
-
-    const debitCell =
-
-        XLSX.utils.encode_cell({
-            r:R,
-            c:5
-        });
-
-    const kreditCell =
-
-        XLSX.utils.encode_cell({
-            r:R,
-            c:6
-        });
-
-    if(ws[debitCell]){
-
-        ws[debitCell].z =
-        '#,##0';
-
-    }
-
-    if(ws[kreditCell]){
-
-        ws[kreditCell].z =
-        '#,##0';
-
-    }
-
 }
 
-}
+/* ==========================
+   EXPORT PDF
+========================== */
 
 function exportJurnalPDF(){
+    if(!jurnalHistoryData.length){
+        alert("Data jurnal kosong");
+        return;
+    }
 
-    const {
-        jsPDF
-    } = window.jspdf;
+    const { jsPDF } = window.jspdf;
 
-    const doc =
-        new jsPDF(
-            "l",
-            "mm",
-            "a4"
-        );
-
-    doc.setFontSize(16);
-
-    doc.text(
-
-        "AUMARIX ACCOUNTING SYSTEM",
-
-        14,
-
-        15
-
-    );
-
-    doc.setFontSize(12);
-
-    doc.text(
-
-        "JURNAL UMUM",
-
-        14,
-
-        23
-
-    );
-
-    const rows = [];
-
-    document
-    .querySelectorAll(
-        "#jurnalHistory tr"
-    )
-    .forEach(tr=>{
-
-        rows.push([
-
-            tr.cells[0].innerText,
-            tr.cells[1].innerText,
-            tr.cells[2].innerText,
-            tr.cells[3].innerText,
-            tr.cells[4].innerText,
-            tr.cells[5].innerText,
-            tr.cells[6].innerText
-
-        ]);
-
+    const doc = new jsPDF({
+        orientation:"landscape",
+        unit:"mm",
+        format:"a4"
     });
 
+    doc.setFontSize(16);
+    doc.text("AUMARIX ACCOUNTING SYSTEM", 14, 15);
+
+    doc.setFontSize(12);
+    doc.text("JURNAL UMUM", 14, 23);
+
+    const body = jurnalHistoryData.map(row => [
+        formatTanggalJurnal(row["Tanggal"]),
+        row["No. Bukti"] || "",
+        row["Keterangan"] || "",
+        row["Kode Akun"] || "",
+        row["Nama Akun"] || "",
+        rupiahJurnal(row["Debit"]),
+        rupiahJurnal(row["Kredit"])
+    ]);
+
     doc.autoTable({
-
         startY:30,
-
         head:[[
             "Tanggal",
             "No Bukti",
@@ -1247,19 +776,29 @@ function exportJurnalPDF(){
             "Debit",
             "Kredit"
         ]],
-
-        body:rows
-
+        body:body,
+        theme:"grid",
+        styles:{
+            fontSize:8,
+            cellPadding:2
+        },
+        headStyles:{
+            fillColor:[37,99,235],
+            textColor:255
+        }
     });
 
     doc.save(
-
-        `JurnalUmum_${
-            new Date()
-            .toISOString()
-            .slice(0,10)
-        }.pdf`
-
+        `JurnalUmum_${new Date().toISOString().slice(0,10)}.pdf`
     );
+}
 
+/* ==========================
+   AUTO LOAD
+========================== */
+
+if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", loadJurnal);
+}else{
+    loadJurnal();
 }

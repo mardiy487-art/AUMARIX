@@ -1,40 +1,80 @@
 /* =====================================================
    AUMARIX ACCOUNTING SYSTEM
-   JURNAL PENYESUAIAN
+   PENYESUAIAN.CSS
 ===================================================== */
 
 /* ==========================
-   HEADER
+   PAGE HEADER
 ========================== */
 
-:root{
+.page-header{
 
-    --primary:#2563eb;
-    --primary-dark:#1d4ed8;
-
-    --success:#10b981;
-    --danger:#ef4444;
-    --warning:#f59e0b;
-
-    --bg:#f1f5f9;
-    --card:#ffffff;
-
-    --text:#0f172a;
-    --text-light:#64748b;
-
-    --border:#e2e8f0;
-
-    --shadow:
-    0 10px 30px rgba(15,23,42,.08);
-
-    --radius:16px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
 
 }
+
+.page-header h3{
+
+    margin:0;
+    font-size:26px;
+    font-weight:700;
+    color:#ffffff;
+
+}
+
+.header-actions{
+
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+
+}
+
+/* ==========================
+   CARD
+========================== */
+
+.card{
+
+    background:#ffffff;
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:20px;
+
+    box-shadow:
+    0 10px 30px
+    rgba(15,23,42,.08);
+
+}
+
+/* ==========================
+   HEADER COLOR
+========================== */
+
+.page-header{
+
+    background:linear-gradient(
+        135deg,
+        #7c3aed,
+        #5b21b6
+    );
+
+    padding:20px;
+    border-radius:18px;
+
+}
+
+/* ==========================
+   FORM HEADER
+========================== */
 
 .jurnal-header{
 
     display:grid;
-
     grid-template-columns:
     repeat(4,1fr);
 
@@ -42,59 +82,36 @@
 
 }
 
-/* ==========================
-   TOOLBAR
-========================== */
-
-.jurnal-toolbar{
-
-    display:flex;
-
-    gap:10px;
-
-    margin-bottom:15px;
-
-}
-
-/* ==========================
-   FORM
-========================== */
-
 .form-group{
 
     display:flex;
-
     flex-direction:column;
 
 }
 
 .form-label{
 
-    font-size:13px;
-
     font-weight:600;
-
-    color:#64748b;
-
-    margin-bottom:6px;
+    margin-bottom:8px;
+    color:#475569;
 
 }
+
+/* ==========================
+   FORM CONTROL
+========================== */
 
 .form-control{
 
     width:100%;
+    min-height:46px;
 
-    height:46px;
+    padding:12px 14px;
 
-    border:1px solid var(--border);
+    border:
+    1px solid #cbd5e1;
 
     border-radius:12px;
-
-    padding:0 15px;
-
-    font-size:14px;
-
-    background:white;
 
     transition:.25s;
 
@@ -104,12 +121,115 @@
 
     outline:none;
 
-    border-color:var(--primary);
+    border-color:#7c3aed;
 
     box-shadow:
-
     0 0 0 4px
-    rgba(37,99,235,.15);
+    rgba(124,58,237,.15);
+
+}
+
+/* ==========================
+   STATUS BALANCE
+========================== */
+
+#statusBalance{
+
+    height:46px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    border-radius:12px;
+
+    font-weight:700;
+
+}
+
+.balance-ok{
+
+    background:#dcfce7;
+    color:#166534;
+
+}
+
+.balance-error{
+
+    background:#fee2e2;
+    color:#991b1b;
+
+}
+
+/* ==========================
+   SUMMARY
+========================== */
+
+.jurnal-summary{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,1fr);
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+}
+
+.summary-card{
+
+    background:#ffffff;
+
+    border-radius:16px;
+
+    padding:20px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    box-shadow:
+    0 8px 25px
+    rgba(0,0,0,.06);
+
+}
+
+.summary-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:5px;
+
+    background:linear-gradient(
+        90deg,
+        #7c3aed,
+        #a855f7
+    );
+
+}
+
+.summary-title{
+
+    font-size:12px;
+    text-transform:uppercase;
+    color:#64748b;
+    margin-bottom:10px;
+
+}
+
+.summary-value{
+
+    font-size:28px;
+    font-weight:800;
+    color:#0f172a;
 
 }
 
@@ -117,68 +237,89 @@
    TABLE
 ========================== */
 
-.jurnal-table{
+.table-responsive{
+
+    overflow:auto;
+    border-radius:14px;
+
+}
+
+.table{
 
     width:100%;
+    min-width:1100px;
 
     border-collapse:separate;
-
     border-spacing:0;
 
-    overflow:hidden;
-
-    border-radius:12px;
-
 }
 
-.jurnal-table thead{
+.table thead th{
 
-    background:
-
-    linear-gradient(
-        135deg,
-        #2563eb,
-        #1d4ed8
-    );
-
+    background:#1e293b;
     color:white;
 
-}
+    position:sticky;
+    top:0;
 
-.jurnal-table th{
+    z-index:2;
 
     padding:12px;
 
-    text-align:left;
-
-    font-size:13px;
-
-    font-weight:600;
+    white-space:nowrap;
 
 }
 
-.jurnal-table td{
+.table tbody tr{
 
-    padding:10px;
+    transition:.2s;
+
+}
+
+.table tbody tr:nth-child(even){
+
+    background:#fafafa;
+
+}
+
+.table tbody tr:hover{
+
+    background:#f3f4f6;
+
+}
+
+.table td{
+
+    padding:12px;
 
     border-bottom:
-    1px solid #e5e7eb;
-
-}
-
-.jurnal-table tbody tr:hover{
-
-    background:#f8fafc;
+    1px solid #e2e8f0;
 
 }
 
 /* ==========================
-   RESPONSIVE TABLE
+   NOMINAL
 ========================== */
 
-.table-responsive{
+.debit{
 
-    overflow-x:auto;
+    text-align:right;
+    color:#16a34a;
+    font-weight:700;
+
+}
+
+.kredit{
+
+    text-align:right;
+    color:#dc2626;
+    font-weight:700;
+
+}
+
+.text-right{
+
+    text-align:right;
 
 }
 
@@ -188,54 +329,42 @@
 
 .jurnal-total{
 
-    display:grid;
-
-    grid-template-columns:
-    repeat(2,1fr);
-
+    display:flex;
+    justify-content:flex-end;
     gap:20px;
 
     margin-top:20px;
+
+    flex-wrap:wrap;
 
 }
 
 .total-box{
 
+    min-width:240px;
+
     background:#f8fafc;
 
-    border:1px solid #e5e7eb;
+    border-radius:14px;
 
-    border-radius:12px;
-
-    padding:20px;
-
-    text-align:center;
+    padding:18px;
 
 }
 
 .total-label{
 
-    font-size:13px;
-
-    font-weight:600;
-
+    font-size:12px;
     color:#64748b;
-
     margin-bottom:10px;
 
 }
 
 .total-value{
 
-    font-size:24px;
-
-    font-weight:700;
+    font-size:26px;
+    font-weight:800;
 
 }
-
-/* ==========================
-   WARNA TOTAL
-========================== */
 
 .total-debit{
 
@@ -250,101 +379,39 @@
 }
 
 /* ==========================
-   STATUS BALANCE
+   BALANCE INFO
 ========================== */
 
 .balance-status{
 
-    margin-top:25px;
+    margin-top:15px;
 
-    padding:18px;
+    text-align:right;
+
+    font-size:18px;
+
+    font-weight:700;
+
+}
+
+/* ==========================
+   FILTER
+========================== */
+
+.search-filter{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(7,1fr);
+
+    gap:10px;
+
+    background:#f8fafc;
+
+    padding:15px;
 
     border-radius:16px;
-
-    text-align:center;
-
-    font-weight:700;
-
-    font-size:16px;
-
-    box-shadow:
-    0 6px 20px rgba(0,0,0,.08);
-
-}
-
-.balance-ok{
-
-    background:#dcfce7;
-
-    color:#166534;
-
-    border:
-    1px solid #86efac;
-
-}
-
-.balance-error{
-
-    background:#fee2e2;
-
-    color:#991b1b;
-
-    border:
-    1px solid #fca5a5;
-
-}
-
-/* ==========================
-   SEARCH
-========================== */
-
-.search-box{
-
-    margin-bottom:15px;
-
-}
-
-.search-box input{
-
-    width:100%;
-
-}
-
-/* ==========================
-   CARD
-========================== */
-
-.card{
-
-    background:var(--card);
-
-    border-radius:var(--radius);
-
-    padding:24px;
-
-    margin-bottom:24px;
-
-    border:1px solid var(--border);
-
-    box-shadow:var(--shadow);
-
-    transition:.25s;
-
-}
-
-.card:hover{
-
-    transform:translateY(-2px);
-
-}
-
-.card-title{
-
-    font-size:22px;
-
-    font-weight:700;
-
-    color:var(--text);
 
     margin-bottom:20px;
 
@@ -358,39 +425,41 @@
 
     border:none;
 
-    border-radius:8px;
+    border-radius:12px;
 
-    padding:10px 18px;
+    padding:10px 16px;
 
     cursor:pointer;
 
-    font-size:14px;
-
     font-weight:600;
 
-    transition:.2s;
+    transition:.25s;
 
 }
 
 .btn:hover{
 
-    transform:
-    translateY(-1px);
-
-}
-
-.btn-success{
-
-    background:#16a34a;
-
-    color:white;
+    transform:translateY(-2px);
 
 }
 
 .btn-primary{
 
     background:#2563eb;
+    color:white;
 
+}
+
+.btn-success{
+
+    background:#16a34a;
+    color:white;
+
+}
+
+.btn-warning{
+
+    background:#f59e0b;
     color:white;
 
 }
@@ -398,18 +467,21 @@
 .btn-danger{
 
     background:#dc2626;
-
     color:white;
 
 }
 
-/* ==========================
-   TEXT ALIGN
-========================== */
+.btn-secondary{
 
-.text-right{
+    background:#64748b;
+    color:white;
 
-    text-align:right;
+}
+
+.btn-sm{
+
+    padding:6px 10px;
+    font-size:12px;
 
 }
 
@@ -417,7 +489,25 @@
    MOBILE
 ========================== */
 
-@media (max-width:768px){
+@media(max-width:768px){
+
+    .page-header{
+
+        flex-direction:column;
+        align-items:stretch;
+
+    }
+
+    .header-actions{
+
+        display:grid;
+
+        grid-template-columns:
+        repeat(2,1fr);
+
+        width:100%;
+
+    }
 
     .jurnal-header{
 
@@ -426,151 +516,42 @@
 
     }
 
-    .jurnal-total{
+    .jurnal-summary{
 
         grid-template-columns:
         1fr;
 
     }
 
-    .jurnal-toolbar{
+    .search-filter{
+
+        grid-template-columns:
+        1fr;
+
+    }
+
+    .jurnal-total{
 
         flex-direction:column;
 
     }
 
-    .btn{
+    .total-box{
 
         width:100%;
 
     }
 
-}
+    .balance-status{
 
-body{
+        text-align:center;
 
-    background:var(--bg);
+    }
 
-    font-family:
-    'Segoe UI',
-    sans-serif;
+    .summary-value{
 
-    color:var(--text);
+        font-size:22px;
 
-}
-
-.summary-grid{
-
-    display:grid;
-
-    grid-template-columns:
-    repeat(auto-fit,minmax(220px,1fr));
-
-    gap:20px;
-
-    margin-bottom:25px;
-
-}
-
-.summary-card{
-
-    background:white;
-
-    border-radius:18px;
-
-    padding:24px;
-
-    box-shadow:var(--shadow);
-
-    border:1px solid var(--border);
-
-}
-
-.summary-label{
-
-    font-size:13px;
-
-    color:var(--text-light);
-
-    margin-bottom:8px;
-
-}
-
-.summary-value{
-
-    font-size:28px;
-
-    font-weight:700;
-
-    color:var(--primary);
-
-}
-
-/* ==========================
-   ACTION BUTTON
-========================== */
-
-.btn-warning{
-
-    background:#f59e0b;
-
-    color:white;
-
-}
-
-.btn-warning:hover{
-
-    background:#d97706;
-
-}
-
-.btn-action{
-
-    width:38px;
-
-    height:38px;
-
-    border:none;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-    font-size:16px;
-
-    transition:.25s;
-
-}
-
-.btn-action:hover{
-
-    transform:scale(1.08);
-
-}
-
-.btn-edit{
-
-    background:#3b82f6;
-
-    color:white;
-
-}
-
-.btn-delete{
-
-    background:#ef4444;
-
-    color:white;
-
-}
-.jurnal-toolbar{
-
-    display:flex;
-
-    flex-wrap:wrap;
-
-    gap:12px;
-
-    margin-bottom:20px;
+    }
 
 }

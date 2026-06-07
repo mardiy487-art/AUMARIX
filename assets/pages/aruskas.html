@@ -1,118 +1,284 @@
+<!-- ==========================================
+     AUMARIX ACCOUNTING SYSTEM
+     FILE : aruskas.html
+========================================== -->
+
 <div class="aruskas-page">
 
+    <!-- HEADER -->
     <div class="page-header">
 
-        <h2>
-            💰 Laporan Arus Kas
-        </h2>
+        <div>
+            <h2>
+                💰 Laporan Arus Kas
+            </h2>
 
-        <p>
-            Metode Langsung (Direct Method)
-        </p>
+            <p>
+                Metode Langsung (Direct Method)
+            </p>
+
+            <div
+                id="periodeArusKas"
+                class="cash-period">
+                Periode : Semua Data
+            </div>
+        </div>
 
     </div>
 
-    <!-- SUMMARY -->
+    <!-- FILTER -->
+    <div class="cash-filter">
 
+        <div class="form-group">
+            <label for="tanggalAwalArusKas">
+                Dari Tanggal
+            </label>
+
+            <input
+                type="date"
+                id="tanggalAwalArusKas"
+                class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="tanggalAkhirArusKas">
+                Sampai Tanggal
+            </label>
+
+            <input
+                type="date"
+                id="tanggalAkhirArusKas"
+                class="form-control">
+        </div>
+
+        <button
+            type="button"
+            class="btn btn-primary"
+            onclick="loadArusKas()">
+            🔍 Tampilkan
+        </button>
+
+        <button
+            type="button"
+            class="btn btn-success"
+            onclick="loadArusKas()">
+            🔄 Refresh
+        </button>
+
+        <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="resetArusKas()">
+            ♻️ Reset
+        </button>
+
+        <button
+            type="button"
+            class="btn btn-warning"
+            onclick="exportArusKasExcel()">
+            📊 Excel
+        </button>
+
+        <button
+            type="button"
+            class="btn btn-danger"
+            onclick="exportArusKasPDF()">
+            📄 PDF
+        </button>
+
+    </div>
+
+    <!-- SUMMARY UTAMA -->
     <div class="cash-summary">
 
         <div class="summary-card">
-
             <div class="summary-title">
-
-                Saldo Awal Kas
-
+                Saldo Awal Kas & Bank
             </div>
 
             <div
                 id="saldoAwalKas"
                 class="summary-value">
-
                 Rp 0
-
             </div>
-
         </div>
 
         <div class="summary-card">
-
             <div class="summary-title">
-
-                Kenaikan Kas
-
+                Kenaikan / Penurunan Kas
             </div>
 
             <div
                 id="kenaikanKas"
                 class="summary-value">
-
                 Rp 0
-
             </div>
-
         </div>
 
         <div class="summary-card">
-
             <div class="summary-title">
-
-                Saldo Akhir Kas
-
+                Saldo Akhir Kas & Bank
             </div>
 
             <div
                 id="saldoAkhirKas"
                 class="summary-value">
-
                 Rp 0
+            </div>
+        </div>
 
+    </div>
+
+    <!-- RINCIAN SALDO AWAL KAS -->
+    <div class="cash-card">
+
+        <h3>
+            💳 Rincian Saldo Awal Kas & Bank
+        </h3>
+
+        <div id="saldoAwalKasDetail">
+            <div class="loading-box">
+                Memuat saldo awal kas...
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SUMMARY AKTIVITAS -->
+    <div class="cash-summary">
+
+        <div class="summary-card">
+            <div class="summary-title">
+                Arus Kas Operasi
             </div>
 
+            <div
+                id="totalOperasi"
+                class="summary-value">
+                Rp 0
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">
+                Arus Kas Investasi
+            </div>
+
+            <div
+                id="totalInvestasi"
+                class="summary-value">
+                Rp 0
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">
+                Arus Kas Pendanaan
+            </div>
+
+            <div
+                id="totalPendanaan"
+                class="summary-value">
+                Rp 0
+            </div>
+        </div>
+
+    </div>
+
+    <!-- INFO -->
+    <div class="cash-summary">
+
+        <div class="summary-card">
+            <div class="summary-title">
+                Total Kas Masuk
+            </div>
+
+            <div
+                id="totalMasuk"
+                class="summary-value">
+                Rp 0
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">
+                Total Kas Keluar
+            </div>
+
+            <div
+                id="totalKeluar"
+                class="summary-value">
+                Rp 0
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">
+                Jumlah Transaksi
+            </div>
+
+            <div
+                id="jumlahTransaksiArusKas"
+                class="summary-value">
+                0
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">
+                Tanggal Cetak
+            </div>
+
+            <div
+                id="tanggalCetakArusKas"
+                class="summary-value">
+                -
+            </div>
         </div>
 
     </div>
 
     <!-- OPERASI -->
-
     <div class="cash-card">
 
         <h3>
             Aktivitas Operasi
         </h3>
 
-        <div
-            id="operasiContainer">
-
+        <div id="operasiContainer">
+            <div class="loading-box">
+                Memuat aktivitas operasi...
+            </div>
         </div>
 
     </div>
 
     <!-- INVESTASI -->
-
     <div class="cash-card">
 
         <h3>
             Aktivitas Investasi
         </h3>
 
-        <div
-            id="investasiContainer">
-
+        <div id="investasiContainer">
+            <div class="loading-box">
+                Memuat aktivitas investasi...
+            </div>
         </div>
 
     </div>
 
     <!-- PENDANAAN -->
-
     <div class="cash-card">
 
         <h3>
             Aktivitas Pendanaan
         </h3>
 
-        <div
-            id="pendanaanContainer">
-
+        <div id="pendanaanContainer">
+            <div class="loading-box">
+                Memuat aktivitas pendanaan...
+            </div>
         </div>
 
     </div>

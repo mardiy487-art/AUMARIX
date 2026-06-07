@@ -1,8 +1,62 @@
+/* =====================================================
+   AUMARIX ACCOUNTING SYSTEM
+   FILE : aruskas.css
+===================================================== */
+
+/* ==========================
+   PAGE
+========================== */
+
 .aruskas-page{
     display:flex;
     flex-direction:column;
     gap:20px;
 }
+
+/* ==========================
+   HEADER
+========================== */
+
+.cash-period{
+    margin-top:8px;
+    font-size:14px;
+    color:#64748b;
+    font-weight:600;
+}
+
+/* ==========================
+   FILTER
+========================== */
+
+.cash-filter{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    align-items:end;
+    background:white;
+    padding:20px;
+    border-radius:16px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.cash-filter .form-group{
+    min-width:220px;
+}
+
+.cash-filter label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:600;
+    color:#334155;
+}
+
+.cash-filter .form-control{
+    width:100%;
+}
+
+/* ==========================
+   SUMMARY
+========================== */
 
 .cash-summary{
     display:grid;
@@ -16,18 +70,29 @@
     border-radius:16px;
     padding:20px;
     box-shadow:0 2px 10px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.summary-card:hover{
+    transform:translateY(-2px);
 }
 
 .summary-title{
     color:#64748b;
     font-size:14px;
+    font-weight:600;
 }
 
 .summary-value{
     margin-top:10px;
     font-size:26px;
     font-weight:700;
+    color:#0f172a;
 }
+
+/* ==========================
+   CARD
+========================== */
 
 .cash-card{
     background:white;
@@ -41,18 +106,40 @@
     padding:18px;
     background:#1e40af;
     color:white;
+    font-size:18px;
 }
+
+/* ==========================
+   ROW
+========================== */
 
 .cash-row{
     display:flex;
     justify-content:space-between;
+    align-items:center;
     padding:14px 18px;
     border-bottom:1px solid #f1f5f9;
+    transition:.2s;
 }
 
 .cash-row:hover{
     background:#f8fafc;
 }
+
+.cash-row:last-child{
+    border-bottom:none;
+}
+
+.cash-row small{
+    display:block;
+    margin-top:4px;
+    color:#64748b;
+    font-size:12px;
+}
+
+/* ==========================
+   CASH IN / OUT
+========================== */
 
 .cash-in{
     color:#16a34a;
@@ -64,22 +151,164 @@
     font-weight:700;
 }
 
+/* ==========================
+   TOTAL
+========================== */
+
 .cash-total{
     display:flex;
     justify-content:space-between;
+    align-items:center;
     background:#0f172a;
     color:white;
     padding:18px;
     font-weight:700;
 }
 
+.cash-total span:last-child{
+    font-size:18px;
+}
+
+/* ==========================
+   LOADING
+========================== */
+
+.loading-box{
+    padding:30px;
+    text-align:center;
+    color:#64748b;
+}
+
+/* ==========================
+   EMPTY
+========================== */
+
+.empty-row{
+    padding:20px;
+    text-align:center;
+    color:#94a3b8;
+    font-weight:600;
+}
+
+/* ==========================
+   ERROR
+========================== */
+
+.error-box{
+    padding:20px;
+    text-align:center;
+    color:#dc2626;
+    font-weight:600;
+}
+
+/* ==========================
+   POSITIVE / NEGATIVE
+========================== */
+
+.positive{
+    color:#16a34a;
+}
+
+.negative{
+    color:#dc2626;
+}
+
+/* ==========================
+   BUTTON COLOR
+========================== */
+
+.btn-primary{
+    background:#2563eb;
+    color:white;
+}
+
+.btn-success{
+    background:#16a34a;
+    color:white;
+}
+
+.btn-warning{
+    background:#f59e0b;
+    color:white;
+}
+
+.btn-danger{
+    background:#dc2626;
+    color:white;
+}
+
+.btn-secondary{
+    background:#64748b;
+    color:white;
+}
+
+/* ==========================
+   RESPONSIVE TABLET
+========================== */
+
+@media(max-width:992px){
+
+    .cash-summary{
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+}
+
+/* ==========================
+   RESPONSIVE MOBILE
+========================== */
+
 @media(max-width:768px){
 
-    .cash-row{
+    .cash-filter{
+        flex-direction:column;
+        align-items:stretch;
+    }
 
+    .cash-filter .form-group{
+        width:100%;
+        min-width:100%;
+    }
+
+    .cash-summary{
+        grid-template-columns:1fr;
+    }
+
+    .summary-value{
+        font-size:22px;
+    }
+
+    .cash-row{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:6px;
+    }
+
+    .cash-total{
         flex-direction:column;
         gap:5px;
+        align-items:flex-start;
+    }
 
+}
+
+/* ==========================
+   ANDROID SMALL
+========================== */
+
+@media(max-width:480px){
+
+    .summary-card{
+        padding:16px;
+    }
+
+    .summary-value{
+        font-size:20px;
+    }
+
+    .cash-card h3{
+        font-size:16px;
     }
 
 }

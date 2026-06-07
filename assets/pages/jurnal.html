@@ -1,47 +1,48 @@
 <!-- ==========================================
-     HEADER
+     AUMARIX ACCOUNTING SYSTEM
+     FILE : jurnal-umum.html
 ========================================== -->
 
-<div class="card">
+<div class="card jurnal-page">
 
+    <!-- HEADER -->
     <div class="page-header">
 
-        <h3>
-            📒 JURNAL UMUM
-        </h3>
+        <div>
+            <h3>📒 Jurnal Umum</h3>
+            <p class="page-subtitle">
+                Input transaksi jurnal umum dan kelola riwayat transaksi
+            </p>
+        </div>
 
         <div class="header-actions">
 
             <button
+                type="button"
                 class="btn btn-success"
                 onclick="addJurnalRow()">
-
                 ➕ Tambah Baris
-
             </button>
 
             <button
+                type="button"
                 class="btn btn-primary"
                 onclick="saveJurnal()">
-
                 💾 Simpan
-
             </button>
 
             <button
+                type="button"
                 class="btn btn-warning"
                 onclick="exportJurnalExcel()">
-
                 📤 Excel
-
             </button>
 
             <button
+                type="button"
                 class="btn btn-danger"
                 onclick="exportJurnalPDF()">
-
                 📄 PDF
-
             </button>
 
         </div>
@@ -56,11 +57,12 @@
 
 <div class="card">
 
+    <input type="hidden" id="editNoBukti">
+
     <div class="jurnal-header">
 
         <div class="form-group">
-
-            <label class="form-label">
+            <label class="form-label" for="tanggalJurnal">
                 Tanggal
             </label>
 
@@ -68,26 +70,22 @@
                 type="date"
                 id="tanggalJurnal"
                 class="form-control">
-
         </div>
 
         <div class="form-group">
-
-            <label class="form-label">
+            <label class="form-label" for="noBukti">
                 No Bukti
             </label>
 
             <input
-    type="text"
-    id="noBukti"
-    class="form-control"
-    placeholder="Masukkan No Bukti">
-
+                type="text"
+                id="noBukti"
+                class="form-control"
+                placeholder="Contoh: TRS-01-01">
         </div>
 
-        <div class="form-group">
-
-            <label class="form-label">
+        <div class="form-group jurnal-keterangan">
+            <label class="form-label" for="keterangan">
                 Keterangan
             </label>
 
@@ -96,23 +94,18 @@
                 id="keterangan"
                 class="form-control"
                 placeholder="Masukkan keterangan jurnal">
-
         </div>
 
         <div class="form-group">
-
             <label class="form-label">
                 Status Balance
             </label>
 
             <div
                 id="statusBalance"
-                class="status-balance">
-
+                class="status-balance status-danger">
                 🔴 BELUM BALANCE
-
             </div>
-
         </div>
 
     </div>
@@ -126,75 +119,23 @@
 <div class="jurnal-summary">
 
     <div class="summary-card">
-
-        <div class="summary-title">
-
-            Total Baris
-
-        </div>
-
-        <div
-            class="summary-value"
-            id="summaryBaris">
-
-            0
-
-        </div>
-
+        <div class="summary-title">Total Baris</div>
+        <div class="summary-value" id="summaryBaris">0</div>
     </div>
 
     <div class="summary-card">
-
-        <div class="summary-title">
-
-            Total Debit
-
-        </div>
-
-        <div
-            class="summary-value"
-            id="totalDebitCard">
-
-            Rp 0
-
-        </div>
-
+        <div class="summary-title">Total Debit</div>
+        <div class="summary-value" id="totalDebitCard">Rp 0</div>
     </div>
 
     <div class="summary-card">
-
-        <div class="summary-title">
-
-            Total Kredit
-
-        </div>
-
-        <div
-            class="summary-value"
-            id="totalKreditCard">
-
-            Rp 0
-
-        </div>
-
+        <div class="summary-title">Total Kredit</div>
+        <div class="summary-value" id="totalKreditCard">Rp 0</div>
     </div>
 
     <div class="summary-card">
-
-        <div class="summary-title">
-
-            Status
-
-        </div>
-
-        <div
-            class="summary-value"
-            id="summaryStatus">
-
-            Tidak Balance
-
-        </div>
-
+        <div class="summary-title">Status</div>
+        <div class="summary-value" id="summaryStatus">Tidak Balance</div>
     </div>
 
 </div>
@@ -205,47 +146,37 @@
 
 <div class="card">
 
-    <h3 class="card-title">
+    <div class="section-header">
+        <h3 class="card-title">Detail Jurnal</h3>
 
-        Detail Jurnal
-
-    </h3>
+        <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="resetJurnalForm()">
+            🔄 Reset Form
+        </button>
+    </div>
 
     <div class="table-responsive">
 
-        <table
-            class="table jurnal-table">
+        <table class="table jurnal-table">
 
             <thead>
-
                 <tr>
-
-                    <th width="15%">
-                        Kode Akun
-                    </th>
-
-                    <th width="35%">
-                        Nama Akun
-                    </th>
-
-                    <th width="20%">
-                        Debit
-                    </th>
-
-                    <th width="20%">
-                        Kredit
-                    </th>
-
-                    <th width="10%">
-                        Aksi
-                    </th>
-
+                    <th width="18%">Kode Akun</th>
+                    <th width="32%">Nama Akun</th>
+                    <th width="20%" class="text-right">Debit</th>
+                    <th width="20%" class="text-right">Kredit</th>
+                    <th width="10%">Aksi</th>
                 </tr>
-
             </thead>
 
             <tbody id="jurnalDetail">
-
+                <tr>
+                    <td colspan="5" class="empty-table">
+                        Belum ada baris jurnal
+                    </td>
+                </tr>
             </tbody>
 
         </table>
@@ -255,49 +186,25 @@
     <div class="jurnal-total">
 
         <div class="total-box">
-
-            <div class="total-label">
-
-                TOTAL DEBIT
-
-            </div>
-
-            <div
-                class="total-value total-debit"
-                id="totalDebit">
-
+            <div class="total-label">TOTAL DEBIT</div>
+            <div class="total-value total-debit" id="totalDebit">
                 Rp 0
-
             </div>
-
         </div>
 
         <div class="total-box">
-
-            <div class="total-label">
-
-                TOTAL KREDIT
-
-            </div>
-
-            <div
-                class="total-value total-kredit"
-                id="totalKredit">
-
+            <div class="total-label">TOTAL KREDIT</div>
+            <div class="total-value total-kredit" id="totalKredit">
                 Rp 0
-
             </div>
-
         </div>
 
     </div>
 
     <div
         id="balanceInfo"
-        class="balance-status">
-
+        class="balance-status status-danger">
         🔴 BELUM BALANCE
-
     </div>
 
 </div>
@@ -310,15 +217,24 @@
 
     <div class="page-header">
 
-        <h3>
-            📋 RIWAYAT JURNAL
-        </h3>
+        <div>
+            <h3>📋 Riwayat Jurnal Umum</h3>
+            <p class="page-subtitle">
+                Cari, filter, edit, dan hapus transaksi jurnal umum
+            </p>
+        </div>
+
+        <button
+            type="button"
+            class="btn btn-primary"
+            onclick="loadJurnalHistory()">
+            🔄 Refresh
+        </button>
 
     </div>
 
     <!-- FILTER -->
-
-    <div class="search-filter">
+    <div class="search-filter jurnal-filter">
 
         <input
             type="date"
@@ -334,76 +250,60 @@
             type="text"
             id="filterNoBukti"
             class="form-control"
-            placeholder="No Bukti">
+            placeholder="Cari No Bukti">
 
         <select
-    id="filterNamaAkun"
-    class="form-control">
-
-    <option value="">
-        Semua Akun
-    </option>
-
-</select>
+            id="filterNamaAkun"
+            class="form-control">
+            <option value="">Semua Akun</option>
+        </select>
 
         <input
             type="text"
             id="filterKeterangan"
             class="form-control"
-            placeholder="Keterangan">
+            placeholder="Cari Keterangan">
 
         <button
+            type="button"
             class="btn btn-primary"
             onclick="filterJurnal()">
-
             🔍 Filter
-
         </button>
 
         <button
+            type="button"
             class="btn btn-secondary"
             onclick="resetFilterJurnal()">
-
             🔄 Reset
-
         </button>
 
     </div>
 
-    <!-- TABEL -->
-
+    <!-- TABEL RIWAYAT -->
     <div class="table-responsive">
 
-        <table class="table">
+        <table class="table jurnal-history-table">
 
             <thead>
-
                 <tr>
-
                     <th>Tanggal</th>
-
                     <th>No Bukti</th>
-
                     <th>Keterangan</th>
-
                     <th>Kode Akun</th>
-
                     <th>Nama Akun</th>
-
-                    <th>Debit</th>
-
-                    <th>Kredit</th>
-
-                    <th width="120">
-                        Aksi
-                    </th>
-
+                    <th class="text-right">Debit</th>
+                    <th class="text-right">Kredit</th>
+                    <th width="150">Aksi</th>
                 </tr>
-
             </thead>
 
             <tbody id="jurnalHistory">
-
+                <tr>
+                    <td colspan="8" class="empty-table">
+                        Memuat riwayat jurnal...
+                    </td>
+                </tr>
             </tbody>
 
         </table>

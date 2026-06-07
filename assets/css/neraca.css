@@ -1,230 +1,346 @@
-/* ==========================================
-   NERACA PAGE
-========================================== */
+/* =====================================================
+   AUMARIX ACCOUNTING SYSTEM
+   FILE : neraca.css
+   MODERN RESPONSIVE FINAL
+===================================================== */
 
 .neraca-page{
     display:flex;
     flex-direction:column;
-    gap:20px;
+    gap:22px;
 }
 
-/* ==========================================
-   HEADER
-========================================== */
+/* HEADER */
 
 .page-header{
-    background:#ffffff;
-    padding:25px;
-    border-radius:16px;
-    box-shadow:0 2px 10px rgba(0,0,0,.08);
+    padding:24px;
+    border-radius:18px;
+    background:linear-gradient(135deg,#2563eb,#1e40af);
+    box-shadow:0 10px 30px rgba(15,23,42,.12);
 }
 
 .page-header h2{
     margin:0;
-    color:#1e3a8a;
+    color:#ffffff;
     font-size:28px;
-    font-weight:700;
+    font-weight:800;
 }
 
 .page-header p{
-    margin-top:8px;
-    color:#64748b;
+    margin:8px 0 0;
+    color:#dbeafe;
     font-size:14px;
 }
 
-/* ==========================================
-   SUMMARY
-========================================== */
-
-.neraca-summary{
-    display:grid;
-    grid-template-columns:
-    repeat(
-        auto-fit,
-        minmax(250px,1fr)
-    );
-    gap:20px;
-}
-
-.summary-card{
-    background:#ffffff;
-    padding:25px;
-    border-radius:16px;
-    box-shadow:0 2px 10px rgba(0,0,0,.08);
-}
-
-.summary-title{
-    color:#64748b;
-    font-size:14px;
-    margin-bottom:10px;
-}
-
-.summary-value{
-    font-size:28px;
+.neraca-period{
+    margin-top:12px;
+    display:inline-block;
+    padding:10px 16px;
+    border-radius:999px;
+    background:rgba(255,255,255,.18);
+    color:#ffffff;
     font-weight:700;
 }
 
-/* ==========================================
-   WARNA CARD
-========================================== */
+/* FILTER */
 
-.aktiva{
-    border-left:
-    6px solid #2563eb;
+.neraca-filter{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    align-items:flex-end;
+    background:#ffffff;
+    padding:20px;
+    border-radius:18px;
+    border:1px solid #e5e7eb;
+    box-shadow:0 8px 25px rgba(15,23,42,.07);
 }
 
-.passiva{
-    border-left:
-    6px solid #059669;
+.neraca-filter .form-group{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+    min-width:190px;
+    flex:1;
 }
 
-.status{
-    border-left:
-    6px solid #f59e0b;
+.neraca-filter label{
+    font-size:14px;
+    font-weight:700;
+    color:#475569;
 }
 
-/* ==========================================
-   GRID
-========================================== */
+.form-control{
+    width:100%;
+    min-height:46px;
+    padding:10px 13px;
+    border:1px solid #cbd5e1;
+    border-radius:12px;
+    font-size:14px;
+}
+
+.form-control:focus{
+    outline:none;
+    border-color:#2563eb;
+    box-shadow:0 0 0 4px rgba(37,99,235,.15);
+}
+
+/* BUTTON */
+
+.btn{
+    border:none;
+    border-radius:12px;
+    padding:10px 16px;
+    min-height:46px;
+    cursor:pointer;
+    font-weight:700;
+    transition:.25s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn-primary{background:#2563eb;color:#fff;}
+.btn-success{background:#16a34a;color:#fff;}
+.btn-warning{background:#f59e0b;color:#fff;}
+.btn-danger{background:#dc2626;color:#fff;}
+.btn-secondary,
+.btn-info{background:#64748b;color:#fff;}
+
+/* SUMMARY */
+
+.neraca-summary{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:16px;
+}
+
+.summary-card{
+    position:relative;
+    overflow:hidden;
+    background:#ffffff;
+    padding:22px;
+    border-radius:18px;
+    border:1px solid #e5e7eb;
+    box-shadow:0 8px 25px rgba(15,23,42,.07);
+    transition:.25s;
+}
+
+.summary-card:hover{
+    transform:translateY(-3px);
+}
+
+.summary-card::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:5px;
+    background:#2563eb;
+}
+
+.aktiva::before{background:#2563eb;}
+.passiva::before{background:#16a34a;}
+.status::before{background:#f59e0b;}
+.selisih::before{background:#dc2626;}
+
+.summary-title{
+    color:#64748b;
+    font-size:12px;
+    font-weight:800;
+    margin-bottom:10px;
+    text-transform:uppercase;
+}
+
+.summary-value{
+    font-size:25px;
+    font-weight:800;
+    color:#0f172a;
+}
+
+/* GRID */
 
 .neraca-grid{
     display:grid;
-    grid-template-columns:
-    1fr 1fr;
+    grid-template-columns:1fr 1fr;
     gap:20px;
 }
 
-/* ==========================================
-   CARD
-========================================== */
+/* CARD */
 
 .neraca-card{
     background:#ffffff;
-    border-radius:16px;
-    box-shadow:0 2px 10px rgba(0,0,0,.08);
+    border-radius:18px;
+    box-shadow:0 8px 25px rgba(15,23,42,.07);
     overflow:hidden;
+    border:1px solid #e5e7eb;
 }
 
 .neraca-card h3{
     margin:0;
     padding:18px;
-    background:#1e40af;
+    background:#1e293b;
     color:#ffffff;
     font-size:18px;
     text-align:center;
+    font-weight:800;
 }
 
-/* ==========================================
-   GROUP
-========================================== */
+/* GROUP */
 
 .group-title{
     background:#eff6ff;
     color:#1e40af;
-    font-weight:700;
-    padding:12px 18px;
+    font-weight:800;
+    padding:13px 18px;
     border-bottom:1px solid #dbeafe;
+    text-transform:uppercase;
 }
 
-/* ==========================================
-   ROW
-========================================== */
+/* ROW */
 
 .row{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:12px 18px;
+    gap:14px;
+    padding:13px 18px;
     border-bottom:1px solid #f1f5f9;
+    color:#334155;
 }
 
 .row:hover{
     background:#f8fafc;
 }
 
-/* ==========================================
-   TOTAL
-========================================== */
+.row span:first-child{
+    font-weight:600;
+}
+
+.row span:last-child{
+    text-align:right;
+    white-space:nowrap;
+    font-weight:800;
+    font-variant-numeric:tabular-nums;
+}
+
+.empty-row{
+    color:#94a3b8;
+}
+
+/* TOTAL */
 
 .total-row{
     display:flex;
     justify-content:space-between;
-    padding:14px 18px;
+    gap:14px;
+    padding:15px 18px;
     background:#f8fafc;
-    font-weight:700;
+    font-weight:800;
     color:#0f172a;
+}
+
+.total-row span:last-child{
+    text-align:right;
+    white-space:nowrap;
 }
 
 .grand-total{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    background:#0f172a;
+    gap:14px;
+    background:linear-gradient(135deg,#0f172a,#1e293b);
     color:white;
-    padding:18px;
-    font-size:18px;
-    font-weight:700;
+    padding:20px;
+    font-size:19px;
+    font-weight:900;
 }
 
-/* ==========================================
-   ERROR
-========================================== */
+.grand-total span:last-child{
+    text-align:right;
+    white-space:nowrap;
+}
+
+/* STATUS */
+
+.status-seimbang,
+.badge-success{
+    color:#166534;
+    background:#dcfce7;
+    padding:8px 14px;
+    border-radius:999px;
+    display:inline-block;
+    font-weight:800;
+}
+
+.status-tidak,
+.badge-danger{
+    color:#991b1b;
+    background:#fee2e2;
+    padding:8px 14px;
+    border-radius:999px;
+    display:inline-block;
+    font-weight:800;
+}
+
+/* LOADING / ERROR */
+
+.loading-box{
+    padding:35px;
+    text-align:center;
+    color:#64748b;
+    font-weight:700;
+}
 
 .error-box{
     background:#fee2e2;
-    color:#dc2626;
-    padding:15px;
-    border-radius:10px;
+    color:#991b1b;
+    padding:20px;
+    border-radius:14px;
     margin:15px;
-}
-
-/* ==========================================
-   LOADING
-========================================== */
-
-.loading-box{
-    padding:30px;
     text-align:center;
-    color:#64748b;
+    font-weight:800;
 }
 
-/* ==========================================
-   STATUS NERACA
-========================================== */
-
-.status-seimbang{
-    color:#059669;
-    font-weight:700;
-}
-
-.status-tidak{
-    color:#dc2626;
-    font-weight:700;
-}
-
-/* ==========================================
-   MOBILE
-========================================== */
+/* MOBILE */
 
 @media(max-width:900px){
 
     .neraca-grid{
-
-        grid-template-columns:
-        1fr;
-
+        grid-template-columns:1fr;
     }
 
     .summary-value{
-
         font-size:22px;
-
     }
 
     .page-header h2{
-
-        font-size:22px;
-
+        font-size:23px;
     }
 
+    .neraca-filter{
+        display:grid;
+        grid-template-columns:1fr;
+    }
+
+    .btn{
+        width:100%;
+    }
+
+    .row,
+    .total-row,
+    .grand-total{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .row span:last-child,
+    .total-row span:last-child,
+    .grand-total span:last-child{
+        text-align:left;
+        white-space:normal;
+    }
 }

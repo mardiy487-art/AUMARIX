@@ -1,105 +1,279 @@
+<!-- ==========================================
+     AUMARIX ACCOUNTING SYSTEM
+     FILE : neraca.html
+========================================== -->
+
 <div class="neraca-page">
 
+    <!-- HEADER -->
     <div class="page-header">
 
-        <h2>📊 Laporan Neraca</h2>
+        <div>
+            <h2>📊 Laporan Neraca</h2>
 
-        <p>
-            Laporan Posisi Keuangan
-        </p>
+            <p>
+                Laporan Posisi Keuangan / Balance Sheet
+            </p>
+
+            <div
+                id="periodeNeraca"
+                class="neraca-period">
+                Periode : Semua Data
+            </div>
+        </div>
 
     </div>
 
-    <!-- SUMMARY -->
+    <!-- FILTER -->
+    <div class="neraca-filter">
 
+        <div class="form-group">
+            <label for="tanggalAwalNeraca">
+                Dari Tanggal
+            </label>
+
+            <input
+                type="date"
+                id="tanggalAwalNeraca"
+                class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="tanggalAkhirNeraca">
+                Sampai Tanggal
+            </label>
+
+            <input
+                type="date"
+                id="tanggalAkhirNeraca"
+                class="form-control">
+        </div>
+
+        <button
+            type="button"
+            class="btn btn-primary"
+            onclick="loadNeraca()">
+            🔍 Tampilkan
+        </button>
+
+        <button
+            type="button"
+            class="btn btn-success"
+            onclick="loadNeraca()">
+            🔄 Refresh
+        </button>
+
+        <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="resetNeraca()">
+            ♻️ Reset
+        </button>
+
+        <button
+            type="button"
+            class="btn btn-warning"
+            onclick="exportNeracaExcel()">
+            📊 Excel
+        </button>
+
+        <button
+            type="button"
+            class="btn btn-danger"
+            onclick="exportNeracaPDF()">
+            📄 PDF
+        </button>
+
+    </div>
+
+    <!-- SUMMARY UTAMA -->
     <div class="neraca-summary">
 
         <div class="summary-card aktiva">
-
             <div class="summary-title">
-
                 Total Aktiva
-
             </div>
 
             <div
                 id="totalAktiva"
                 class="summary-value">
-
                 Rp 0
-
             </div>
-
         </div>
 
         <div class="summary-card passiva">
-
             <div class="summary-title">
-
                 Total Passiva
-
             </div>
 
             <div
                 id="totalPassiva"
                 class="summary-value">
-
                 Rp 0
-
             </div>
-
         </div>
 
         <div class="summary-card status">
-
             <div class="summary-title">
-
-                Status
-
+                Status Neraca
             </div>
 
             <div
                 id="statusNeraca"
                 class="summary-value">
-
                 Menunggu...
+            </div>
+        </div>
 
+        <div class="summary-card selisih">
+            <div class="summary-title">
+                Selisih
             </div>
 
+            <div
+                id="selisihNeraca"
+                class="summary-value">
+                Rp 0
+            </div>
+        </div>
+
+    </div>
+
+    <!-- KPI -->
+    <div class="neraca-summary">
+
+        <div class="summary-card">
+            <div class="summary-title">
+                Current Ratio
+            </div>
+
+            <div
+                id="currentRatio"
+                class="summary-value">
+                0
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">
+                Debt Ratio
+            </div>
+
+            <div
+                id="debtRatio"
+                class="summary-value">
+                0 %
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">
+                Equity Ratio
+            </div>
+
+            <div
+                id="equityRatio"
+                class="summary-value">
+                0 %
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">
+                Modal Kerja
+            </div>
+
+            <div
+                id="modalKerja"
+                class="summary-value">
+                Rp 0
+            </div>
+        </div>
+
+    </div>
+
+    <!-- INFO -->
+    <div class="neraca-summary">
+
+        <div class="summary-card">
+            <div class="summary-title">
+                Tingkat Kesehatan
+            </div>
+
+            <div
+                id="tingkatKesehatan"
+                class="summary-value">
+                -
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">
+                Jumlah Akun Neraca
+            </div>
+
+            <div
+                id="jumlahAkunNeraca"
+                class="summary-value">
+                0
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">
+                Jumlah Akun Aktiva
+            </div>
+
+            <div
+                id="jumlahAktiva"
+                class="summary-value">
+                0
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">
+                Tanggal Cetak
+            </div>
+
+            <div
+                id="tanggalCetakNeraca"
+                class="summary-value">
+                -
+            </div>
         </div>
 
     </div>
 
     <!-- BODY -->
-
     <div class="neraca-grid">
 
         <!-- AKTIVA -->
-
         <div class="neraca-card">
 
             <h3>
                 AKTIVA
             </h3>
 
-            <div
-                id="aktivaContent">
-
+            <div id="aktivaContent">
+                <div class="loading-box">
+                    Memuat data aktiva...
+                </div>
             </div>
 
         </div>
 
         <!-- PASSIVA -->
-
         <div class="neraca-card">
 
             <h3>
                 PASSIVA
             </h3>
 
-            <div
-                id="passivaContent">
-
+            <div id="passivaContent">
+                <div class="loading-box">
+                    Memuat data passiva...
+                </div>
             </div>
 
         </div>
