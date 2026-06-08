@@ -36,7 +36,7 @@ const PAGE_CONFIG = {
 
     aset: {
         title: "Aset Tetap",
-        init: "loadAset"
+        init: "loadAsetTetap"
     },
 
     neracalajur: {

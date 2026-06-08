@@ -1,5 +1,12 @@
+/* =====================================================
+   AUMARIX ACCOUNTING SYSTEM
+   FILE : api.js
+   MODE : FETCH GET + POST
+===================================================== */
+
 /* ==========================================
    API GET
+   Untuk ambil data / laporan
 ========================================== */
 
 async function apiGet(action, params = {}) {
@@ -9,19 +16,26 @@ async function apiGet(action, params = {}) {
         showLoading();
 
         const query = new URLSearchParams({
-            action,
+            action: action,
             ...params
         });
 
         const response = await fetch(
-            `${CONFIG.API_URL}?${query}`
+            `${CONFIG.API_URL}?${query.toString()}`
         );
 
-        const result = await response.json();
+        const text = await response.text();
 
         hideLoading();
 
-        return result;
+        try {
+            return JSON.parse(text);
+        } catch {
+            return {
+                success: false,
+                message: text
+            };
+        }
 
     } catch (err) {
 
@@ -40,6 +54,7 @@ async function apiGet(action, params = {}) {
 
 /* ==========================================
    API POST
+   Untuk simpan / update / delete
 ========================================== */
 
 async function apiPost(action, data = {}) {
@@ -64,16 +79,12 @@ async function apiPost(action, data = {}) {
         hideLoading();
 
         try {
-
             return JSON.parse(text);
-
         } catch {
-
             return {
                 success: false,
                 message: text
             };
-
         }
 
     } catch (err) {
@@ -89,4 +100,12 @@ async function apiPost(action, data = {}) {
 
     }
 
+}
+
+/* ==========================================
+   API PING
+========================================== */
+
+async function apiPing() {
+    return await apiGet("ping");
 }

@@ -1,328 +1,208 @@
-<!-- ==========================================
+<!-- =====================================================
      AUMARIX ACCOUNTING SYSTEM
      FILE : dashboard.html
-========================================== -->
+     SUMBER DATA : LAPORAN KEUANGAN RESMI
+===================================================== -->
 
 <div class="dashboard-page">
 
-    <!-- HEADER -->
     <div class="page-header">
-
         <div>
-            <h2>
-                📊 Dashboard Keuangan
-            </h2>
+            <h2>📊 Dashboard Keuangan</h2>
+            <p>Ringkasan dari Laba Rugi, Neraca, Perubahan Modal, dan Arus Kas</p>
 
-            <p>
-                Ringkasan performa keuangan AUMARIX Accounting System
-            </p>
-
-            <div
-                id="periodeDashboard"
-                class="dashboard-period">
+            <div id="periodeDashboard" class="dashboard-period">
                 Periode : Semua Data
             </div>
         </div>
 
+        <div class="header-actions">
+            <button type="button" class="btn btn-success" onclick="loadDashboard()">
+                🔄 Refresh
+            </button>
+        </div>
     </div>
 
-    <!-- FILTER -->
     <div class="dashboard-filter">
-
         <div class="form-group">
-            <label for="tanggalAwalDashboard">
-                Dari Tanggal
-            </label>
-
-            <input
-                type="date"
-                id="tanggalAwalDashboard"
-                class="form-control">
+            <label>Dari Tanggal</label>
+            <input type="date" id="tanggalAwalDashboard" class="form-control">
         </div>
 
         <div class="form-group">
-            <label for="tanggalAkhirDashboard">
-                Sampai Tanggal
-            </label>
-
-            <input
-                type="date"
-                id="tanggalAkhirDashboard"
-                class="form-control">
+            <label>Sampai Tanggal</label>
+            <input type="date" id="tanggalAkhirDashboard" class="form-control">
         </div>
 
-        <button
-            type="button"
-            class="btn btn-primary"
-            onclick="loadDashboard()">
+        <button type="button" class="btn btn-primary" onclick="loadDashboard()">
             🔍 Tampilkan
         </button>
 
-        <button
-            type="button"
-            class="btn btn-success"
-            onclick="loadDashboard()">
-            🔄 Refresh
-        </button>
-
-        <button
-            type="button"
-            class="btn btn-secondary"
-            onclick="resetDashboard()">
+        <button type="button" class="btn btn-secondary" onclick="resetDashboard()">
             ♻️ Reset
         </button>
-
     </div>
 
-    <!-- KPI UTAMA -->
     <div class="dashboard-kpi-grid">
-
         <div class="dashboard-card kas">
-            <div class="dashboard-card-title">
-                💰 Saldo Kas & Bank
-            </div>
-
-            <div
-                id="dashSaldoKas"
-                class="dashboard-card-value">
-                Rp 0
-            </div>
+            <div class="dashboard-card-title">💰 Saldo Kas & Bank</div>
+            <div id="dashSaldoKas" class="dashboard-card-value">Rp 0</div>
         </div>
 
         <div class="dashboard-card laba">
-            <div class="dashboard-card-title">
-                📈 Laba Bersih
-            </div>
-
-            <div
-                id="dashLabaBersih"
-                class="dashboard-card-value">
-                Rp 0
-            </div>
+            <div class="dashboard-card-title">📈 Laba Bersih</div>
+            <div id="dashLabaBersih" class="dashboard-card-value">Rp 0</div>
         </div>
 
         <div class="dashboard-card aktiva">
-            <div class="dashboard-card-title">
-                🏦 Total Aktiva
-            </div>
-
-            <div
-                id="dashTotalAktiva"
-                class="dashboard-card-value">
-                Rp 0
-            </div>
+            <div class="dashboard-card-title">🏦 Total Aktiva</div>
+            <div id="dashTotalAktiva" class="dashboard-card-value">Rp 0</div>
         </div>
 
         <div class="dashboard-card passiva">
-            <div class="dashboard-card-title">
-                ⚖️ Total Passiva
-            </div>
-
-            <div
-                id="dashTotalPassiva"
-                class="dashboard-card-value">
-                Rp 0
-            </div>
+            <div class="dashboard-card-title">⚖️ Total Passiva</div>
+            <div id="dashTotalPassiva" class="dashboard-card-value">Rp 0</div>
         </div>
 
         <div class="dashboard-card modal">
-            <div class="dashboard-card-title">
-                👤 Modal Akhir
-            </div>
-
-            <div
-                id="dashModalAkhir"
-                class="dashboard-card-value">
-                Rp 0
-            </div>
-        </div>
-
-        <div class="dashboard-card transaksi">
-            <div class="dashboard-card-title">
-                📄 Total Transaksi
-            </div>
-
-            <div
-                id="dashTotalTransaksi"
-                class="dashboard-card-value">
-                0
-            </div>
-        </div>
-
-        <div class="dashboard-card akun">
-            <div class="dashboard-card-title">
-                📒 Total Akun
-            </div>
-
-            <div
-                id="dashTotalAkun"
-                class="dashboard-card-value">
-                0
-            </div>
+            <div class="dashboard-card-title">👤 Modal Akhir</div>
+            <div id="dashModalAkhir" class="dashboard-card-value">Rp 0</div>
         </div>
 
         <div class="dashboard-card status">
-            <div class="dashboard-card-title">
-                ✅ Status Neraca
-            </div>
-
-            <div
-                id="dashStatusNeraca"
-                class="dashboard-card-value">
-                -
-            </div>
+            <div class="dashboard-card-title">✅ Status Neraca</div>
+            <div id="dashStatusNeraca" class="dashboard-card-value">-</div>
         </div>
-
     </div>
 
-    <!-- RASIO -->
     <div class="dashboard-kpi-grid">
-
         <div class="dashboard-card">
-            <div class="dashboard-card-title">
-                Current Ratio
-            </div>
-
-            <div
-                id="dashCurrentRatio"
-                class="dashboard-card-value">
-                0
-            </div>
+            <div class="dashboard-card-title">Pendapatan</div>
+            <div id="dashPendapatan" class="dashboard-card-value">Rp 0</div>
         </div>
 
         <div class="dashboard-card">
-            <div class="dashboard-card-title">
-                Debt Ratio
-            </div>
-
-            <div
-                id="dashDebtRatio"
-                class="dashboard-card-value">
-                0 %
-            </div>
+            <div class="dashboard-card-title">Beban</div>
+            <div id="dashBeban" class="dashboard-card-value">Rp 0</div>
         </div>
 
         <div class="dashboard-card">
-            <div class="dashboard-card-title">
-                Equity Ratio
-            </div>
-
-            <div
-                id="dashEquityRatio"
-                class="dashboard-card-value">
-                0 %
-            </div>
+            <div class="dashboard-card-title">Kenaikan / Penurunan Kas</div>
+            <div id="dashKenaikanKas" class="dashboard-card-value">Rp 0</div>
         </div>
 
         <div class="dashboard-card">
-            <div class="dashboard-card-title">
-                Kenaikan / Penurunan Kas
-            </div>
-
-            <div
-                id="dashKenaikanKas"
-                class="dashboard-card-value">
-                Rp 0
-            </div>
+            <div class="dashboard-card-title">Total Kewajiban</div>
+            <div id="dashTotalKewajiban" class="dashboard-card-value">Rp 0</div>
         </div>
 
+        <div class="dashboard-card">
+            <div class="dashboard-card-title">Total Akun</div>
+            <div id="dashTotalAkun" class="dashboard-card-value">0</div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="dashboard-card-title">Total Aset Tetap</div>
+            <div id="dashTotalAsetTetap" class="dashboard-card-value">0</div>
+        </div>
     </div>
 
-    <!-- GRAFIK -->
+    <div class="dashboard-kpi-grid">
+        <div class="dashboard-card">
+            <div class="dashboard-card-title">Current Ratio</div>
+            <div id="dashCurrentRatio" class="dashboard-card-value">0</div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="dashboard-card-title">Debt Ratio</div>
+            <div id="dashDebtRatio" class="dashboard-card-value">0%</div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="dashboard-card-title">Equity Ratio</div>
+            <div id="dashEquityRatio" class="dashboard-card-value">0%</div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="dashboard-card-title">Margin Laba Bersih</div>
+            <div id="dashMarginLabaBersih" class="dashboard-card-value">0%</div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="dashboard-card-title">ROE</div>
+            <div id="dashROE" class="dashboard-card-value">0%</div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="dashboard-card-title">Cash Ratio</div>
+            <div id="dashCashRatio" class="dashboard-card-value">0%</div>
+        </div>
+    </div>
+
     <div class="dashboard-chart-grid">
-
         <div class="dashboard-chart-card">
-            <h3>
-                📊 Pendapatan vs Beban vs Laba
-            </h3>
-
+            <h3>📊 Grafik Laba Rugi</h3>
             <div class="chart-box">
                 <canvas id="chartLabaRugi"></canvas>
             </div>
         </div>
 
         <div class="dashboard-chart-card">
-            <h3>
-                💰 Komposisi Kas & Bank
-            </h3>
-
-            <div class="chart-box">
-                <canvas id="chartKasBank"></canvas>
-            </div>
-        </div>
-
-        <div class="dashboard-chart-card">
-            <h3>
-                🏦 Komposisi Neraca
-            </h3>
-
+            <h3>🏦 Grafik Neraca</h3>
             <div class="chart-box">
                 <canvas id="chartNeraca"></canvas>
             </div>
         </div>
 
         <div class="dashboard-chart-card">
-            <h3>
-                📈 Arus Kas
-            </h3>
-
+            <h3>📈 Grafik Arus Kas</h3>
             <div class="chart-box">
                 <canvas id="chartArusKas"></canvas>
             </div>
         </div>
 
+        <div class="dashboard-chart-card">
+            <h3>💰 Grafik Kas & Bank</h3>
+            <div class="chart-box">
+                <canvas id="chartKasBank"></canvas>
+            </div>
+        </div>
     </div>
 
-    <!-- DETAIL KAS BANK -->
     <div class="dashboard-section-card">
-
-        <h3>
-            💳 Rincian Kas & Bank
-        </h3>
+        <h3>💳 Detail Kas & Bank</h3>
 
         <div id="dashKasBankDetail">
             <div class="loading-box">
-                Memuat rincian kas dan bank...
+                Memuat detail kas dan bank...
             </div>
         </div>
-
     </div>
 
-    <!-- TRANSAKSI TERAKHIR -->
     <div class="dashboard-section-card">
+        <h3>🩺 Health Check Neraca</h3>
 
-        <h3>
-            🧾 Transaksi Terakhir
-        </h3>
+        <div class="dashboard-health-grid">
+            <div class="dashboard-health-item">
+                <span>Status Sistem</span>
+                <strong id="dashHealthStatus">-</strong>
+            </div>
 
-        <div class="table-responsive">
+            <div class="dashboard-health-item">
+                <span>Total Aktiva</span>
+                <strong id="dashHealthAktiva">Rp 0</strong>
+            </div>
 
-            <table class="table dashboard-table">
+            <div class="dashboard-health-item">
+                <span>Total Passiva</span>
+                <strong id="dashHealthPassiva">Rp 0</strong>
+            </div>
 
-                <thead>
-                    <tr>
-                        <th>Tanggal</th>
-                        <th>Sumber</th>
-                        <th>No Bukti</th>
-                        <th>Keterangan</th>
-                        <th>Akun</th>
-                        <th class="text-right">Debit</th>
-                        <th class="text-right">Kredit</th>
-                    </tr>
-                </thead>
-
-                <tbody id="dashTransaksiTerakhir">
-                    <tr>
-                        <td colspan="7" class="empty-table">
-                            Memuat transaksi terakhir...
-                        </td>
-                    </tr>
-                </tbody>
-
-            </table>
-
+            <div class="dashboard-health-item">
+                <span>Selisih Neraca</span>
+                <strong id="dashSelisihNeraca">Rp 0</strong>
+            </div>
         </div>
-
     </div>
 
 </div>

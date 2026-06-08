@@ -1,298 +1,513 @@
 /* =====================================================
    AUMARIX ACCOUNTING SYSTEM
-   FILE : neraca.css
-   MODERN RESPONSIVE FINAL
+   FILE : neraca-lajur.css
+   PREMIUM RESPONSIVE FINAL
 ===================================================== */
 
-.neraca-page{
+/* ==========================
+   PAGE
+========================== */
+
+.neraca-lajur-page,
+.worksheet-page{
     display:flex;
     flex-direction:column;
     gap:22px;
 }
 
-/* HEADER */
+/* ==========================
+   PAGE HEADER
+========================== */
 
 .page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    flex-wrap:wrap;
     padding:24px;
-    border-radius:18px;
-    background:linear-gradient(135deg,#2563eb,#1e40af);
-    box-shadow:0 10px 30px rgba(15,23,42,.12);
+    border-radius:20px;
+    background:linear-gradient(135deg,#312e81 0%,#4338ca 60%,#6366f1 100%);
+    box-shadow:0 12px 30px rgba(67,56,202,.22);
 }
 
-.page-header h2{
+.page-header h2,
+.page-header h3{
     margin:0;
     color:#ffffff;
-    font-size:28px;
-    font-weight:800;
+    font-size:27px;
+    font-weight:900;
 }
 
+.page-subtitle,
 .page-header p{
-    margin:8px 0 0;
-    color:#dbeafe;
+    margin:7px 0 0;
+    color:#e0e7ff;
     font-size:14px;
+    font-weight:600;
 }
 
-.neraca-period{
-    margin-top:12px;
-    display:inline-block;
-    padding:10px 16px;
-    border-radius:999px;
-    background:rgba(255,255,255,.18);
-    color:#ffffff;
-    font-weight:700;
-}
-
-/* FILTER */
-
-.neraca-filter{
+.header-actions{
     display:flex;
+    gap:10px;
     flex-wrap:wrap;
-    gap:12px;
-    align-items:flex-end;
-    background:#ffffff;
-    padding:20px;
-    border-radius:18px;
-    border:1px solid #e5e7eb;
-    box-shadow:0 8px 25px rgba(15,23,42,.07);
 }
 
-.neraca-filter .form-group{
+/* ==========================
+   CARD
+========================== */
+
+.card{
+    background:linear-gradient(135deg,#ffffff 0%,#f8f7ff 100%);
+    border:1px solid #e0e7ff;
+    border-radius:20px;
+    padding:24px;
+    margin-bottom:20px;
+    box-shadow:0 10px 30px rgba(15,23,42,.08);
+}
+
+/* ==========================
+   FILTER
+========================== */
+
+.worksheet-filter,
+.neraca-lajur-filter,
+.search-filter{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    background:linear-gradient(135deg,#ffffff 0%,#f8f7ff 100%);
+    border:1px solid #e0e7ff;
+    border-radius:18px;
+    padding:16px;
+    margin-bottom:20px;
+    box-shadow:0 8px 22px rgba(15,23,42,.055);
+}
+
+.form-group{
     display:flex;
     flex-direction:column;
     gap:7px;
-    min-width:190px;
-    flex:1;
 }
 
-.neraca-filter label{
+.form-label,
+.form-group label{
     font-size:14px;
-    font-weight:700;
+    font-weight:800;
     color:#475569;
 }
 
 .form-control{
     width:100%;
     min-height:46px;
-    padding:10px 13px;
+    padding:11px 13px;
     border:1px solid #cbd5e1;
     border-radius:12px;
+    background:#ffffff;
+    color:#0f172a;
     font-size:14px;
+    transition:
+        border-color .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
 }
 
 .form-control:focus{
     outline:none;
-    border-color:#2563eb;
-    box-shadow:0 0 0 4px rgba(37,99,235,.15);
+    border-color:#4f46e5;
+    box-shadow:0 0 0 4px rgba(79,70,229,.15);
 }
 
-/* BUTTON */
+/* ==========================
+   SUMMARY
+========================== */
 
-.btn{
-    border:none;
-    border-radius:12px;
-    padding:10px 16px;
-    min-height:46px;
-    cursor:pointer;
-    font-weight:700;
-    transition:.25s;
-}
-
-.btn:hover{
-    transform:translateY(-2px);
-}
-
-.btn-primary{background:#2563eb;color:#fff;}
-.btn-success{background:#16a34a;color:#fff;}
-.btn-warning{background:#f59e0b;color:#fff;}
-.btn-danger{background:#dc2626;color:#fff;}
-.btn-secondary,
-.btn-info{background:#64748b;color:#fff;}
-
-/* SUMMARY */
-
-.neraca-summary{
+.worksheet-summary,
+.neraca-lajur-summary{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
     gap:16px;
+    margin-bottom:20px;
 }
 
-.summary-card{
+.summary-card,
+.worksheet-card{
     position:relative;
     overflow:hidden;
-    background:#ffffff;
-    padding:22px;
+    background:linear-gradient(135deg,#ffffff 0%,#eef2ff 100%);
+    border:1px solid #e0e7ff;
     border-radius:18px;
-    border:1px solid #e5e7eb;
-    box-shadow:0 8px 25px rgba(15,23,42,.07);
-    transition:.25s;
+    padding:20px;
+    box-shadow:0 9px 24px rgba(15,23,42,.07);
+    transition:
+        box-shadow .25s ease,
+        filter .25s ease;
 }
 
-.summary-card:hover{
-    transform:translateY(-3px);
+.summary-card:hover,
+.worksheet-card:hover{
+    box-shadow:0 12px 30px rgba(15,23,42,.09);
+    filter:brightness(1.02);
 }
 
-.summary-card::before{
+.summary-card::before,
+.worksheet-card::before{
     content:"";
     position:absolute;
     top:0;
     left:0;
     width:100%;
     height:5px;
-    background:#2563eb;
+    background:linear-gradient(90deg,#4338ca,#818cf8);
 }
 
-.aktiva::before{background:#2563eb;}
-.passiva::before{background:#16a34a;}
-.status::before{background:#f59e0b;}
-.selisih::before{background:#dc2626;}
-
-.summary-title{
+.summary-title,
+.worksheet-card h4{
     color:#64748b;
     font-size:12px;
-    font-weight:800;
+    font-weight:900;
     margin-bottom:10px;
     text-transform:uppercase;
 }
 
-.summary-value{
-    font-size:25px;
+.summary-value,
+.worksheet-card .value{
+    font-size:24px;
+    font-weight:900;
+    color:#0f172a;
+}
+
+/* ==========================
+   INFO BOX
+========================== */
+
+.worksheet-info,
+.neraca-lajur-info{
+    background:linear-gradient(135deg,#ffffff 0%,#eef2ff 100%);
+    border:1px solid #c7d2fe;
+    color:#3730a3;
+    padding:15px 16px;
+    border-radius:16px;
+    margin-bottom:18px;
+    font-size:13px;
+    font-weight:800;
+    line-height:1.6;
+}
+
+/* ==========================
+   TABLE WRAPPER
+========================== */
+
+.table-responsive,
+.worksheet-table-wrapper,
+.neraca-lajur-table-wrapper{
+    width:100%;
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+    background:#ffffff;
+    border:1px solid #e0e7ff;
+    border-radius:18px;
+    box-shadow:0 10px 28px rgba(15,23,42,.07);
+    max-height:680px;
+}
+
+.table-responsive::-webkit-scrollbar,
+.worksheet-table-wrapper::-webkit-scrollbar,
+.neraca-lajur-table-wrapper::-webkit-scrollbar{
+    height:9px;
+    width:9px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb,
+.worksheet-table-wrapper::-webkit-scrollbar-thumb,
+.neraca-lajur-table-wrapper::-webkit-scrollbar-thumb{
+    background:#c7d2fe;
+    border-radius:20px;
+}
+
+/* ==========================
+   TABLE
+========================== */
+
+.table,
+.worksheet-table,
+.neraca-lajur-table{
+    width:100%;
+    min-width:1350px;
+    border-collapse:separate;
+    border-spacing:0;
+    background:#ffffff;
+}
+
+/* ==========================
+   TABLE HEADER
+========================== */
+
+.table thead th,
+.worksheet-table thead th,
+.neraca-lajur-table thead th{
+    position:sticky;
+    top:0;
+    z-index:10;
+    background:linear-gradient(135deg,#0f172a 0%,#312e81 100%);
+    color:#ffffff;
+    padding:12px 10px;
+    font-size:12.5px;
+    font-weight:900;
+    text-align:center;
+    white-space:nowrap;
+    border-right:1px solid rgba(255,255,255,.12);
+}
+
+/* header baris kedua jika ada colspan */
+.table thead tr:nth-child(2) th,
+.worksheet-table thead tr:nth-child(2) th,
+.neraca-lajur-table thead tr:nth-child(2) th{
+    top:42px;
+    background:linear-gradient(135deg,#3730a3 0%,#4f46e5 100%);
+    color:#ffffff;
+    z-index:9;
+}
+
+/* ==========================
+   BODY
+========================== */
+
+.table tbody td,
+.worksheet-table tbody td,
+.neraca-lajur-table tbody td{
+    padding:11px 10px;
+    border-bottom:1px solid #e5e7eb;
+    border-right:1px solid #f1f5f9;
+    color:#334155;
+    font-size:13px;
+    vertical-align:middle;
+}
+
+.table tbody tr:nth-child(even),
+.worksheet-table tbody tr:nth-child(even),
+.neraca-lajur-table tbody tr:nth-child(even){
+    background:#fafafa;
+}
+
+.table tbody tr:hover,
+.worksheet-table tbody tr:hover,
+.neraca-lajur-table tbody tr:hover{
+    background:#f8f7ff;
+}
+
+/* ==========================
+   KODE AKUN & NAMA AKUN
+   FIX KOLOM KODE AGAR TIDAK PANJANG
+========================== */
+
+.col-kode,
+.kode-akun,
+.worksheet-code,
+.neraca-lajur-code,
+.table th:first-child,
+.table td:first-child,
+.worksheet-table th:first-child,
+.worksheet-table td:first-child,
+.neraca-lajur-table th:first-child,
+.neraca-lajur-table td:first-child{
+    width:105px;
+    min-width:105px;
+    max-width:105px;
+    white-space:nowrap;
+    text-align:left;
+    font-weight:900;
+    color:#3730a3;
+}
+
+.col-akun,
+.nama-akun,
+.worksheet-account,
+.neraca-lajur-account,
+.table th:nth-child(2),
+.table td:nth-child(2),
+.worksheet-table th:nth-child(2),
+.worksheet-table td:nth-child(2),
+.neraca-lajur-table th:nth-child(2),
+.neraca-lajur-table td:nth-child(2){
+    min-width:240px;
+    max-width:320px;
+    white-space:normal;
+    word-break:break-word;
+    text-align:left;
     font-weight:800;
     color:#0f172a;
 }
 
-/* GRID */
+/* ==========================
+   NOMINAL
+========================== */
 
-.neraca-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px;
-}
-
-/* CARD */
-
-.neraca-card{
-    background:#ffffff;
-    border-radius:18px;
-    box-shadow:0 8px 25px rgba(15,23,42,.07);
-    overflow:hidden;
-    border:1px solid #e5e7eb;
-}
-
-.neraca-card h3{
-    margin:0;
-    padding:18px;
-    background:#1e293b;
-    color:#ffffff;
-    font-size:18px;
-    text-align:center;
-    font-weight:800;
-}
-
-/* GROUP */
-
-.group-title{
-    background:#eff6ff;
-    color:#1e40af;
-    font-weight:800;
-    padding:13px 18px;
-    border-bottom:1px solid #dbeafe;
-    text-transform:uppercase;
-}
-
-/* ROW */
-
-.row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:14px;
-    padding:13px 18px;
-    border-bottom:1px solid #f1f5f9;
-    color:#334155;
-}
-
-.row:hover{
-    background:#f8fafc;
-}
-
-.row span:first-child{
-    font-weight:600;
-}
-
-.row span:last-child{
+.text-right,
+.text-end,
+.money,
+.nominal,
+.debit,
+.kredit,
+.worksheet-money,
+.neraca-lajur-money{
     text-align:right;
     white-space:nowrap;
-    font-weight:800;
     font-variant-numeric:tabular-nums;
 }
 
-.empty-row{
-    color:#94a3b8;
-}
-
-/* TOTAL */
-
-.total-row{
-    display:flex;
-    justify-content:space-between;
-    gap:14px;
-    padding:15px 18px;
-    background:#f8fafc;
-    font-weight:800;
-    color:#0f172a;
-}
-
-.total-row span:last-child{
-    text-align:right;
-    white-space:nowrap;
-}
-
-.grand-total{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:14px;
-    background:linear-gradient(135deg,#0f172a,#1e293b);
-    color:white;
-    padding:20px;
-    font-size:19px;
+.debit,
+.total-debit{
+    color:#16a34a;
     font-weight:900;
 }
 
-.grand-total span:last-child{
-    text-align:right;
-    white-space:nowrap;
+.kredit,
+.total-kredit{
+    color:#dc2626;
+    font-weight:900;
 }
 
-/* STATUS */
+.worksheet-money,
+.neraca-lajur-money{
+    font-weight:900;
+    color:#334155;
+}
 
-.status-seimbang,
-.badge-success{
-    color:#166534;
+/* ==========================
+   TOTAL ROW
+========================== */
+
+.total-row,
+.worksheet-total-row,
+.neraca-lajur-total-row,
+.table tfoot tr{
+    background:linear-gradient(135deg,#eef2ff 0%,#e0e7ff 100%) !important;
+    font-weight:900;
+    color:#0f172a;
+}
+
+.total-row td,
+.worksheet-total-row td,
+.neraca-lajur-total-row td,
+.table tfoot td{
+    padding:13px 10px;
+    border-top:2px solid #818cf8;
+    color:#111827;
+    font-weight:900;
+}
+
+/* ==========================
+   BALANCE STATUS
+========================== */
+
+.balance-ok,
+.status-success,
+.worksheet-balance-ok{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:7px 12px;
+    border-radius:999px;
     background:#dcfce7;
-    padding:8px 14px;
-    border-radius:999px;
-    display:inline-block;
-    font-weight:800;
+    color:#166534;
+    font-weight:900;
 }
 
-.status-tidak,
-.badge-danger{
-    color:#991b1b;
+.balance-error,
+.status-danger,
+.worksheet-balance-error{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:7px 12px;
+    border-radius:999px;
     background:#fee2e2;
-    padding:8px 14px;
-    border-radius:999px;
-    display:inline-block;
-    font-weight:800;
+    color:#991b1b;
+    font-weight:900;
 }
 
-/* LOADING / ERROR */
+/* ==========================
+   BUTTON
+========================== */
+
+.btn{
+    border:none;
+    border-radius:12px;
+    padding:10px 16px;
+    min-height:42px;
+    cursor:pointer;
+    font-weight:800;
+    font-size:14px;
+    white-space:nowrap;
+    transition:
+        opacity .25s ease,
+        filter .25s ease,
+        box-shadow .25s ease;
+}
+
+.btn:hover{
+    opacity:.96;
+    filter:brightness(1.03);
+}
+
+.btn:active{
+    opacity:.90;
+}
+
+.btn-primary{
+    background:#4f46e5;
+    color:#ffffff;
+    box-shadow:0 8px 18px rgba(79,70,229,.20);
+}
+
+.btn-success{
+    background:#16a34a;
+    color:#ffffff;
+    box-shadow:0 8px 18px rgba(22,163,74,.16);
+}
+
+.btn-warning{
+    background:#f59e0b;
+    color:#ffffff;
+    box-shadow:0 8px 18px rgba(245,158,11,.16);
+}
+
+.btn-danger{
+    background:#dc2626;
+    color:#ffffff;
+    box-shadow:0 8px 18px rgba(220,38,38,.16);
+}
+
+.btn-secondary{
+    background:#64748b;
+    color:#ffffff;
+    box-shadow:0 8px 18px rgba(100,116,139,.16);
+}
+
+.btn-sm{
+    padding:7px 11px;
+    font-size:12px;
+    min-height:34px;
+}
+
+/* ==========================
+   EMPTY / LOADING / ERROR
+========================== */
+
+.empty-table,
+.empty-row{
+    text-align:center;
+    padding:34px !important;
+    color:#94a3b8 !important;
+    font-weight:800;
+}
 
 .loading-box{
-    padding:35px;
+    padding:34px;
     text-align:center;
     color:#64748b;
-    font-weight:700;
+    font-weight:800;
 }
 
 .error-box{
@@ -302,45 +517,169 @@
     border-radius:14px;
     margin:15px;
     text-align:center;
-    font-weight:800;
+    font-weight:900;
 }
 
-/* MOBILE */
+/* ==========================
+   TABLET
+========================== */
 
-@media(max-width:900px){
+@media(max-width:992px){
 
-    .neraca-grid{
-        grid-template-columns:1fr;
+    .worksheet-filter,
+    .neraca-lajur-filter,
+    .search-filter{
+        grid-template-columns:repeat(2,1fr);
     }
 
-    .summary-value{
+    .table,
+    .worksheet-table,
+    .neraca-lajur-table{
+        min-width:1250px;
+    }
+
+}
+
+/* ==========================
+   MOBILE
+========================== */
+
+@media(max-width:768px){
+
+    .page-header{
+        flex-direction:column;
+        align-items:stretch;
+        padding:18px;
+        border-radius:18px;
+    }
+
+    .page-header h2,
+    .page-header h3{
         font-size:22px;
     }
 
-    .page-header h2{
-        font-size:23px;
-    }
-
-    .neraca-filter{
+    .header-actions{
         display:grid;
-        grid-template-columns:1fr;
-    }
-
-    .btn{
+        grid-template-columns:repeat(2,1fr);
         width:100%;
     }
 
-    .row,
-    .total-row,
-    .grand-total{
-        flex-direction:column;
-        align-items:stretch;
+    .header-actions .btn{
+        width:100%;
     }
 
-    .row span:last-child,
-    .total-row span:last-child,
-    .grand-total span:last-child{
-        text-align:left;
-        white-space:normal;
+    .card{
+        padding:18px;
+        border-radius:16px;
     }
+
+    .worksheet-filter,
+    .neraca-lajur-filter,
+    .search-filter{
+        grid-template-columns:1fr;
+        padding:14px;
+    }
+
+    .worksheet-summary,
+    .neraca-lajur-summary{
+        grid-template-columns:1fr;
+    }
+
+    .summary-value,
+    .worksheet-card .value{
+        font-size:21px;
+    }
+
+    .table-responsive,
+    .worksheet-table-wrapper,
+    .neraca-lajur-table-wrapper{
+        max-height:560px;
+        border-radius:16px;
+    }
+
+    .table,
+    .worksheet-table,
+    .neraca-lajur-table{
+        min-width:1150px;
+    }
+
+    .table thead th,
+    .worksheet-table thead th,
+    .neraca-lajur-table thead th{
+        padding:10px 8px;
+        font-size:12px;
+    }
+
+    .table tbody td,
+    .worksheet-table tbody td,
+    .neraca-lajur-table tbody td{
+        padding:10px 8px;
+        font-size:12.5px;
+    }
+
+    .col-kode,
+    .kode-akun,
+    .worksheet-code,
+    .neraca-lajur-code,
+    .table th:first-child,
+    .table td:first-child,
+    .worksheet-table th:first-child,
+    .worksheet-table td:first-child,
+    .neraca-lajur-table th:first-child,
+    .neraca-lajur-table td:first-child{
+        width:95px;
+        min-width:95px;
+        max-width:95px;
+    }
+
+    .col-akun,
+    .nama-akun,
+    .worksheet-account,
+    .neraca-lajur-account,
+    .table th:nth-child(2),
+    .table td:nth-child(2),
+    .worksheet-table th:nth-child(2),
+    .worksheet-table td:nth-child(2),
+    .neraca-lajur-table th:nth-child(2),
+    .neraca-lajur-table td:nth-child(2){
+        min-width:210px;
+        max-width:260px;
+    }
+
+}
+
+/* ==========================
+   SMALL MOBILE
+========================== */
+
+@media(max-width:480px){
+
+    .header-actions{
+        grid-template-columns:1fr;
+    }
+
+    .page-header h2,
+    .page-header h3{
+        font-size:20px;
+    }
+
+    .page-subtitle,
+    .page-header p{
+        font-size:13px;
+    }
+
+    .card{
+        padding:16px;
+    }
+
+    .table,
+    .worksheet-table,
+    .neraca-lajur-table{
+        min-width:1080px;
+    }
+
+    .btn{
+        font-size:13px;
+    }
+
 }

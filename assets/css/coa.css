@@ -1,7 +1,7 @@
 /* =====================================================
    AUMARIX ACCOUNTING SYSTEM
    FILE : coa.css
-   MODERN RESPONSIVE FINAL
+   PREMIUM SOFT COLOR RESPONSIVE
 ===================================================== */
 
 /* ==========================
@@ -14,8 +14,11 @@
     align-items:center;
     gap:16px;
     margin-bottom:24px;
-    padding-bottom:16px;
-    border-bottom:1px solid #e5e7eb;
+    padding:20px 22px;
+    background:linear-gradient(135deg,#ffffff 0%,#f8fafc 100%);
+    border:1px solid #e5e7eb;
+    border-radius:20px;
+    box-shadow:0 8px 24px rgba(15,23,42,.06);
     flex-wrap:wrap;
 }
 
@@ -23,13 +26,14 @@
     margin:0;
     color:#0f172a;
     font-size:24px;
-    font-weight:800;
+    font-weight:900;
 }
 
 .page-subtitle{
     margin-top:6px;
     color:#64748b;
     font-size:14px;
+    font-weight:600;
 }
 
 .header-actions{
@@ -50,30 +54,33 @@
 }
 
 .summary-card{
-    background:linear-gradient(135deg,#ffffff,#f8fafc);
+    background:linear-gradient(135deg,#ffffff 0%,#eff6ff 100%);
     border-radius:18px;
     padding:20px;
-    border:1px solid #e5e7eb;
+    border:1px solid #e2e8f0;
     border-left:5px solid #2563eb;
-    box-shadow:0 8px 24px rgba(15,23,42,.06);
-    transition:.25s ease;
+    box-shadow:0 9px 24px rgba(15,23,42,.07);
+    transition:
+        background .25s ease,
+        box-shadow .25s ease,
+        filter .25s ease;
 }
 
 .summary-card:hover{
-    transform:translateY(-3px);
-    box-shadow:0 14px 34px rgba(15,23,42,.10);
+    box-shadow:0 12px 30px rgba(15,23,42,.09);
+    filter:brightness(1.02);
 }
 
 .summary-title{
     color:#64748b;
     font-size:13px;
     margin-bottom:8px;
-    font-weight:600;
+    font-weight:800;
 }
 
 .summary-value{
     font-size:24px;
-    font-weight:800;
+    font-weight:900;
     color:#0f172a;
 }
 
@@ -86,6 +93,11 @@
     gap:12px;
     margin-bottom:20px;
     flex-wrap:wrap;
+    background:linear-gradient(135deg,#ffffff 0%,#f8fafc 100%);
+    padding:16px;
+    border-radius:18px;
+    border:1px solid #e5e7eb;
+    box-shadow:0 8px 22px rgba(15,23,42,.055);
 }
 
 .search-filter input{
@@ -125,7 +137,7 @@
 .form-label{
     display:block;
     margin-bottom:7px;
-    font-weight:700;
+    font-weight:800;
     color:#475569;
     font-size:14px;
 }
@@ -147,7 +159,7 @@
     overflow:auto;
     max-height:650px;
     border:1px solid #e5e7eb;
-    box-shadow:0 8px 25px rgba(15,23,42,.06);
+    box-shadow:0 10px 28px rgba(15,23,42,.07);
 }
 
 .table-responsive::-webkit-scrollbar{
@@ -167,7 +179,7 @@
 }
 
 .table thead{
-    background:linear-gradient(135deg,#1d4ed8,#2563eb);
+    background:linear-gradient(135deg,#0f172a 0%,#1e40af 100%);
     color:#fff;
 }
 
@@ -177,7 +189,7 @@
     z-index:10;
     padding:14px;
     font-size:13px;
-    font-weight:700;
+    font-weight:900;
     white-space:nowrap;
     text-align:left;
 }
@@ -191,11 +203,11 @@
 }
 
 .table tbody tr{
-    transition:.2s ease;
+    transition:background .2s ease;
 }
 
 .table tbody tr:hover{
-    background:#eff6ff;
+    background:#f8fafc;
 }
 
 .text-right{
@@ -207,7 +219,7 @@
     text-align:center;
     padding:35px !important;
     color:#94a3b8;
-    font-weight:600;
+    font-weight:800;
 }
 
 /* ==========================
@@ -216,21 +228,21 @@
 
 .debit{
     color:#16a34a;
-    font-weight:800;
+    font-weight:900;
 }
 
 .kredit{
     color:#dc2626;
-    font-weight:800;
+    font-weight:900;
 }
 
 .coa-kode{
     color:#2563eb;
-    font-weight:800;
+    font-weight:900;
 }
 
 .coa-nama{
-    font-weight:700;
+    font-weight:800;
     color:#0f172a;
 }
 
@@ -239,7 +251,7 @@
     padding:5px 10px;
     border-radius:999px;
     font-size:12px;
-    font-weight:700;
+    font-weight:800;
 }
 
 .badge-debit{
@@ -271,39 +283,47 @@
     border-radius:12px;
     padding:10px 16px;
     cursor:pointer;
-    transition:.25s ease;
-    font-weight:700;
+    transition:
+        background .25s ease,
+        box-shadow .25s ease,
+        filter .25s ease,
+        opacity .25s ease;
+    font-weight:800;
     font-size:14px;
     white-space:nowrap;
 }
 
 .btn:hover{
-    transform:translateY(-2px);
     opacity:.96;
+    filter:brightness(1.02);
 }
 
 .btn:active{
-    transform:scale(.97);
+    opacity:.9;
 }
 
 .btn-primary{
     background:#2563eb;
     color:#fff;
+    box-shadow:0 8px 18px rgba(37,99,235,.18);
 }
 
 .btn-success{
     background:#16a34a;
     color:#fff;
+    box-shadow:0 8px 18px rgba(22,163,74,.16);
 }
 
 .btn-warning{
     background:#f59e0b;
     color:#fff;
+    box-shadow:0 8px 18px rgba(245,158,11,.16);
 }
 
 .btn-danger{
     background:#dc2626;
     color:#fff;
+    box-shadow:0 8px 18px rgba(220,38,38,.16);
 }
 
 .btn-sm{
@@ -326,13 +346,13 @@
 .modal{
     position:fixed;
     inset:0;
-    background:rgba(15,23,42,.55);
+    background:rgba(15,23,42,.48);
     display:none;
     justify-content:center;
     align-items:center;
     z-index:9999;
     padding:20px;
-    backdrop-filter:blur(3px);
+    backdrop-filter:blur(4px);
 }
 
 .modal-content{
@@ -344,13 +364,13 @@
     max-height:90vh;
     overflow:auto;
     box-shadow:0 28px 70px rgba(15,23,42,.25);
-    animation:modalScale .25s ease;
+    animation:modalScale .22s ease;
 }
 
 @keyframes modalScale{
     from{
         opacity:0;
-        transform:scale(.95);
+        transform:scale(.97);
     }
     to{
         opacity:1;
@@ -372,7 +392,7 @@
     margin:0;
     color:#0f172a;
     font-size:22px;
-    font-weight:800;
+    font-weight:900;
 }
 
 .modal-close{
@@ -385,12 +405,14 @@
     font-size:22px;
     cursor:pointer;
     line-height:1;
-    transition:.2s ease;
+    transition:
+        background .2s ease,
+        opacity .2s ease;
 }
 
 .modal-close:hover{
     background:#fecaca;
-    transform:rotate(90deg);
+    opacity:.96;
 }
 
 .modal-footer{
@@ -416,6 +438,7 @@
     .table{
         min-width:1050px;
     }
+
 }
 
 @media(max-width:768px){
@@ -423,6 +446,8 @@
     .page-header{
         flex-direction:column;
         align-items:stretch;
+        padding:16px;
+        border-radius:18px;
     }
 
     .page-header h3{
@@ -455,6 +480,7 @@
 
     .search-filter{
         flex-direction:column;
+        padding:14px;
     }
 
     .search-filter input,
@@ -498,6 +524,7 @@
         width:100%;
         padding:12px;
     }
+
 }
 
 @media(max-width:480px){
@@ -529,4 +556,5 @@
     .table{
         min-width:950px;
     }
+
 }

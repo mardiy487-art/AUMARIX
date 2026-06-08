@@ -1,206 +1,550 @@
+/* =====================================================
+   AUMARIX ACCOUNTING SYSTEM
+   FILE : asettetap.js
+===================================================== */
+
 let asetData = [];
 
-async function loadAset(){
-    try{
+/* ==========================================
+   HELPER
+========================================== */
+
+function getAsetValue(id) {
+    return document.getElementById(id)?.value?.trim() || "";
+}
+
+function setAsetValue(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.value = value ?? "";
+}
+
+function setAsetText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = value;
+}
+
+function rupiahAset(value) {
+    if (typeof rupiah === "function") {
+        return rupiah(value);
+    }
+
+    return Number(value || 0).toLocaleString("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        maximumFractionDigits: 0
+    });
+}
+
+function escapeAset(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function toNumberAset(value) {
+    return Number(value || 0);
+}
+
+function formatDateInputAset(value) {
+    if (!value) return "";
+
+    const d = new Date(value);
+
+    if (isNaN(d.getTime())) {
+        return value;
+    }
+
+    return d.toISOString().slice(0, 10);
+}
+
+/* ==========================================
+   LOAD ASET
+========================================== */
+
+async function loadAsetTetap() {
+    try {
+        showLoading();
+
         const result = await apiGet("getAsetTetap");
 
-        if(!result.success){
-            throw new Error(result.message || "Gagal mengambil data aset tetap.");
+        if (!result.success) {
+            throw new Error(result.message || "Gagal memuat aset tetap");
         }
 
-        asetData = Array.isArray(result.data) ? result.data : [];
-        renderAsetSummary();
+        asetData =
+            result.data?.rows ||
+            result.data?.data ||
+            result.data ||
+            [];
+
         renderAsetTable();
-    }catch(err){
+        updateAsetSummary();
+
+    } catch (err) {
         console.error(err);
-        asetData = [];
-        renderAsetSummary();
+
         const tbody = document.getElementById("asetTable");
-        if(tbody){
-            tbody.innerHTML = `<tr><td colspan="9" class="text-center">${err.message}</td></tr>`;
+
+        if (tbody) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="14" class="empty-table">
+                        ❌ ${err.message || err}
+                    </td>
+                </tr>
+            `;
         }
+
+    } finally {
+        hideLoading();
     }
 }
 
-function getAsetValue(row, keys){
-    for(const key of keys){
-        if(row && row[key] !== undefined && row[key] !== null && row[key] !== ""){
-            return row[key];
-        }
-    }
-    return "";
+/* ==========================================
+   SUMMARY
+========================================== */
+
+function updateAsetSummary() {
+    let totalHarga = 0;
+    let totalAkumulasi = 0;
+    let totalNilaiBuku = 0;
+
+    asetData.forEach(aset => {
+        totalHarga += toNumberAset(
+            aset.hargaPerolehan ||
+            aset["Harga Perolehan"]
+        );
+
+        totalAkumulasi += toNumberAset(
+            aset.akumulasiPenyusutan
+        );
+
+        totalNilaiBuku += toNumberAset(
+            aset.nilaiBuku
+        );
+    });
+
+    setAsetText("asetTotal", asetData.length);
+    setAsetText("asetHargaTotal", rupiahAset(totalHarga));
+    setAsetText("asetAkumulasiTotal", rupiahAset(totalAkumulasi));
+    setAsetText("asetNilaiBukuTotal", rupiahAset(totalNilaiBuku));
 }
 
-function normalizeAset(row){
-    const harga = Number(getAsetValue(row,["Harga Perolehan","hargaPerolehan","harga_perolehan"]) || 0);
-    const residu = Number(getAsetValue(row,["Nilai Residu","nilaiResidu","nilai_residu"]) || 0);
-    const umur = Number(getAsetValue(row,["Umur Ekonomis (Tahun)","Umur Ekonomis","umurEkonomis","umur_ekonomis"]) || 0);
+/* ==========================================
+   RENDER TABLE
+========================================== */
 
-    return {
-        kodeAset: String(getAsetValue(row,["Kode Aset","kodeAset","kode_aset"])),
-        namaAset: String(getAsetValue(row,["Nama Aset","namaAset","nama_aset"])),
-        kodeAkun: String(getAsetValue(row,["Kode Akun","kodeAkun","kode_akun"])),
-        tanggalPerolehan: getAsetValue(row,["Tanggal Perolehan","tanggalPerolehan","tanggal_perolehan"]),
-        hargaPerolehan: harga,
-        nilaiResidu: residu,
-        umurEkonomis: umur,
-        penyusutanTahunan: umur > 0 ? Math.max((harga - residu) / umur, 0) : 0
-    };
-}
-
-function renderAsetSummary(){
-    const rows = asetData.map(normalizeAset);
-    const totalPerolehan = rows.reduce((sum,row)=>sum + row.hargaPerolehan,0);
-    const totalResidu = rows.reduce((sum,row)=>sum + row.nilaiResidu,0);
-    const totalPenyusutan = rows.reduce((sum,row)=>sum + row.penyusutanTahunan,0);
-
-    setText("asetTotalUnit", numberFormat(rows.length));
-    setText("asetTotalPerolehan", rupiah(totalPerolehan));
-    setText("asetTotalResidu", rupiah(totalResidu));
-    setText("asetTotalPenyusutan", rupiah(totalPenyusutan));
-}
-
-function renderAsetTable(){
+function renderAsetTable() {
     const tbody = document.getElementById("asetTable");
-    if(!tbody) return;
+    if (!tbody) return;
 
-    const keyword = (document.getElementById("searchAset")?.value || "").toLowerCase();
-    const rows = asetData.map(normalizeAset).filter(row =>
-        row.kodeAset.toLowerCase().includes(keyword) ||
-        row.namaAset.toLowerCase().includes(keyword) ||
-        row.kodeAkun.toLowerCase().includes(keyword)
-    );
-
-    if(rows.length === 0){
-        tbody.innerHTML = `<tr><td colspan="9" class="text-center">Data aset belum ada.</td></tr>`;
+    if (!asetData.length) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="14" class="empty-table">
+                    Tidak ada data aset tetap
+                </td>
+            </tr>
+        `;
         return;
     }
 
-    tbody.innerHTML = rows.map(row => `
-        <tr>
-            <td>${escapeHTML(row.kodeAset)}</td>
-            <td>${escapeHTML(row.namaAset)}</td>
-            <td>${escapeHTML(row.kodeAkun)}</td>
-            <td>${formatTanggal(row.tanggalPerolehan)}</td>
-            <td>${rupiah(row.hargaPerolehan)}</td>
-            <td>${rupiah(row.nilaiResidu)}</td>
-            <td>${numberFormat(row.umurEkonomis)} Tahun</td>
-            <td>${rupiah(row.penyusutanTahunan)}</td>
-            <td>
-                <button class="btn" onclick="editAset('${escapeAttr(row.kodeAset)}')">Edit</button>
-                <button class="btn btn-danger" onclick="deleteAset('${escapeAttr(row.kodeAset)}')">Hapus</button>
-            </td>
-        </tr>
-    `).join("");
+    tbody.innerHTML = asetData.map(aset => {
+        const kode =
+            aset["Kode Aset"] ||
+            aset.kodeAset ||
+            "";
+
+        return `
+            <tr>
+                <td><strong>${escapeAset(kode)}</strong></td>
+
+                <td>${escapeAset(aset["Nama Aset"] || aset.namaAset || "")}</td>
+
+                <td>${escapeAset(aset["Kode Akun Aset"] || aset.kodeAkunAset || "")}</td>
+
+                <td>${escapeAset(aset["Kode Akun Akumulasi"] || aset.kodeAkunAkumulasi || "")}</td>
+
+                <td>${escapeAset(aset["Kode Akun Beban Penyusutan"] || aset.kodeAkunBebanPenyusutan || "")}</td>
+
+                <td>${escapeAset(aset["Tanggal Perolehan"] || aset.tanggalPerolehan || "")}</td>
+
+                <td class="text-right">
+                    ${rupiahAset(aset["Harga Perolehan"] || aset.hargaPerolehan)}
+                </td>
+
+                <td class="text-right">
+                    ${rupiahAset(aset["Nilai Residu"] || aset.nilaiResidu)}
+                </td>
+
+                <td>
+                    ${escapeAset(aset["Umur Ekonomis (Tahun)"] || aset.umurEkonomis || 0)} Tahun
+                </td>
+
+                <td class="text-right">
+                    ${rupiahAset(aset.penyusutanBulanan)}
+                </td>
+
+                <td class="text-right">
+                    ${rupiahAset(aset.akumulasiPenyusutan)}
+                </td>
+
+                <td class="text-right">
+                    ${rupiahAset(aset.nilaiBuku)}
+                </td>
+
+                <td>
+                    ${escapeAset(aset["Status"] || aset.status || "AKTIF")}
+                </td>
+
+                <td class="table-actions">
+                    <button
+                        type="button"
+                        class="btn btn-warning btn-sm"
+                        onclick="editAset('${escapeAset(kode)}')">
+                        ✏ Edit
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-danger btn-sm"
+                        onclick="deleteAset('${escapeAset(kode)}')">
+                        🗑 Hapus
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join("");
 }
 
-function showAsetForm(){
-    setText("asetFormTitle","Tambah Aset Tetap");
-    document.getElementById("asetEditMode").value = "false";
-    clearAsetForm();
-    document.getElementById("asetFormCard").style.display = "block";
+/* ==========================================
+   MODAL
+========================================== */
+
+function showAsetModal(mode = "add") {
+    setAsetText(
+        "asetModalTitle",
+        mode === "edit"
+            ? "Edit Aset Tetap"
+            : "Tambah Aset Tetap"
+    );
+
+    if (mode === "add") {
+        resetAsetForm();
+    }
+
+    const modal = document.getElementById("asetModal");
+    if (modal) modal.style.display = "flex";
 }
 
-function hideAsetForm(){
-    const form = document.getElementById("asetFormCard");
-    if(form) form.style.display = "none";
+function closeAsetModal() {
+    const modal = document.getElementById("asetModal");
+    if (modal) modal.style.display = "none";
+
+    resetAsetForm();
 }
 
-function clearAsetForm(){
-    ["kodeAset","namaAset","kodeAkunAset","tanggalPerolehan"].forEach(id=>setValue(id,""));
-    setValue("hargaPerolehan",0);
-    setValue("nilaiResidu",0);
-    setValue("umurEkonomis",1);
+function resetAsetForm() {
+    setAsetValue("editModeAset", "");
+    setAsetValue("oldKodeAset", "");
+    setAsetValue("asetKode", "");
+    setAsetValue("asetNama", "");
+    setAsetValue("asetKodeAkun", "");
+    setAsetValue("asetKodeAkumulasi", "");
+    setAsetValue("asetKodeBeban", "");
+    setAsetValue("asetTanggal", "");
+    setAsetValue("asetHarga", 0);
+    setAsetValue("asetResidu", 0);
+    setAsetValue("asetUmur", 1);
+    setAsetValue("asetMetode", "GARIS_LURUS");
+    setAsetValue("asetStatus", "AKTIF");
 }
 
-function editAset(kodeAset){
-    const row = asetData.map(normalizeAset).find(item => item.kodeAset === kodeAset);
-    if(!row) return error("Data aset tidak ditemukan.");
+/* ==========================================
+   EDIT
+========================================== */
 
-    setText("asetFormTitle","Edit Aset Tetap");
-    setValue("asetEditMode","true");
-    setValue("kodeAset",row.kodeAset);
-    setValue("namaAset",row.namaAset);
-    setValue("kodeAkunAset",row.kodeAkun);
-    setValue("tanggalPerolehan",toInputDate(row.tanggalPerolehan));
-    setValue("hargaPerolehan",row.hargaPerolehan);
-    setValue("nilaiResidu",row.nilaiResidu);
-    setValue("umurEkonomis",row.umurEkonomis || 1);
-    document.getElementById("asetFormCard").style.display = "block";
+function editAset(kodeAset) {
+    const aset = asetData.find(row =>
+        String(row["Kode Aset"] || row.kodeAset) === String(kodeAset)
+    );
+
+    if (!aset) {
+        error("Data aset tidak ditemukan");
+        return;
+    }
+
+    setAsetValue("editModeAset", "EDIT");
+    setAsetValue("oldKodeAset", aset["Kode Aset"] || aset.kodeAset || "");
+    setAsetValue("asetKode", aset["Kode Aset"] || aset.kodeAset || "");
+    setAsetValue("asetNama", aset["Nama Aset"] || aset.namaAset || "");
+    setAsetValue("asetKodeAkun", aset["Kode Akun Aset"] || aset.kodeAkunAset || "");
+    setAsetValue("asetKodeAkumulasi", aset["Kode Akun Akumulasi"] || aset.kodeAkunAkumulasi || "");
+    setAsetValue("asetKodeBeban", aset["Kode Akun Beban Penyusutan"] || aset.kodeAkunBebanPenyusutan || "");
+    setAsetValue("asetTanggal", formatDateInputAset(aset["Tanggal Perolehan"] || aset.tanggalPerolehan || ""));
+    setAsetValue("asetHarga", aset["Harga Perolehan"] || aset.hargaPerolehan || 0);
+    setAsetValue("asetResidu", aset["Nilai Residu"] || aset.nilaiResidu || 0);
+    setAsetValue("asetUmur", aset["Umur Ekonomis (Tahun)"] || aset.umurEkonomis || 1);
+    setAsetValue("asetMetode", aset["Metode Penyusutan"] || aset.metodePenyusutan || "GARIS_LURUS");
+    setAsetValue("asetStatus", aset["Status"] || aset.status || "AKTIF");
+
+    showAsetModal("edit");
 }
 
-async function saveAset(){
-    const data = {
-        "Kode Aset": getValue("kodeAset"),
-        "Nama Aset": getValue("namaAset"),
-        "Kode Akun": getValue("kodeAkunAset"),
-        "Tanggal Perolehan": getValue("tanggalPerolehan"),
-        "Harga Perolehan": Number(getValue("hargaPerolehan") || 0),
-        "Nilai Residu": Number(getValue("nilaiResidu") || 0),
-        "Umur Ekonomis (Tahun)": Number(getValue("umurEkonomis") || 0),
-        editMode: getValue("asetEditMode") === "true"
+/* ==========================================
+   BUILD DATA
+========================================== */
+
+function getAsetFormData() {
+    const kodeAset = getAsetValue("asetKode");
+    const namaAset = getAsetValue("asetNama");
+    const kodeAkunAset = getAsetValue("asetKodeAkun");
+    const kodeAkunAkumulasi = getAsetValue("asetKodeAkumulasi");
+    const kodeAkunBeban = getAsetValue("asetKodeBeban");
+    const tanggal = getAsetValue("asetTanggal");
+    const harga = toNumberAset(getAsetValue("asetHarga"));
+    const residu = toNumberAset(getAsetValue("asetResidu"));
+    const umur = toNumberAset(getAsetValue("asetUmur"));
+
+    if (!kodeAset) {
+        error("Kode aset wajib diisi");
+        return null;
+    }
+
+    if (!namaAset) {
+        error("Nama aset wajib diisi");
+        return null;
+    }
+
+    if (!kodeAkunAset) {
+        error("Kode akun aset wajib diisi");
+        return null;
+    }
+
+    if (!kodeAkunAkumulasi) {
+        error("Kode akun akumulasi wajib diisi");
+        return null;
+    }
+
+    if (!kodeAkunBeban) {
+        error("Kode akun beban penyusutan wajib diisi");
+        return null;
+    }
+
+    if (!tanggal) {
+        error("Tanggal perolehan wajib diisi");
+        return null;
+    }
+
+    if (harga <= 0) {
+        error("Harga perolehan harus lebih dari 0");
+        return null;
+    }
+
+    if (residu < 0) {
+        error("Nilai residu tidak boleh negatif");
+        return null;
+    }
+
+    if (residu >= harga) {
+        error("Nilai residu tidak boleh lebih besar/sama dengan harga perolehan");
+        return null;
+    }
+
+    if (umur <= 0) {
+        error("Umur ekonomis harus lebih dari 0");
+        return null;
+    }
+
+    return {
+        "Kode Aset": kodeAset,
+        "Nama Aset": namaAset,
+        "Kode Akun Aset": kodeAkunAset,
+        "Kode Akun Akumulasi": kodeAkunAkumulasi,
+        "Kode Akun Beban Penyusutan": kodeAkunBeban,
+        "Tanggal Perolehan": tanggal,
+        "Harga Perolehan": harga,
+        "Nilai Residu": residu,
+        "Umur Ekonomis (Tahun)": umur,
+        "Metode Penyusutan": getAsetValue("asetMetode") || "GARIS_LURUS",
+        "Status": getAsetValue("asetStatus") || "AKTIF"
     };
+}
 
-    if(!data["Kode Aset"] || !data["Nama Aset"] || !data["Kode Akun"]){
-        return error("Kode Aset, Nama Aset, dan Kode Akun wajib diisi.");
+/* ==========================================
+   SAVE
+========================================== */
+
+async function saveAsetData() {
+    const data = getAsetFormData();
+    if (!data) return;
+
+    const editMode = getAsetValue("editModeAset");
+    const oldKodeAset = getAsetValue("oldKodeAset");
+
+    const action =
+        editMode === "EDIT"
+            ? "updateAsetTetap"
+            : "saveAsetTetap";
+
+    const payload =
+        editMode === "EDIT"
+            ? {
+                ...data,
+                kodeAset: oldKodeAset,
+                oldKodeAset: oldKodeAset
+            }
+            : data;
+
+    try {
+        const result = await apiPost(action, payload);
+
+        if (result.success) {
+            success(
+                editMode === "EDIT"
+                    ? "Aset berhasil diperbarui"
+                    : "Aset berhasil disimpan"
+            );
+
+            closeAsetModal();
+            await loadAsetTetap();
+
+        } else {
+            error(result.message || "Gagal menyimpan aset");
+        }
+
+    } catch (err) {
+        console.error(err);
+        error(err.message || "Terjadi kesalahan saat menyimpan aset");
+    }
+}
+
+/* ==========================================
+   DELETE
+========================================== */
+
+async function deleteAset(kodeAset) {
+    if (!confirm(`Hapus aset ${kodeAset}?`)) return;
+
+    try {
+        const result = await apiPost("deleteAsetTetap", {
+            kodeAset: kodeAset
+        });
+
+        if (result.success) {
+            success("Aset berhasil dihapus");
+            await loadAsetTetap();
+        } else {
+            error(result.message || "Gagal menghapus aset");
+        }
+
+    } catch (err) {
+        console.error(err);
+        error(err.message || "Terjadi kesalahan saat menghapus aset");
+    }
+}
+
+/* ==========================================
+   EXPORT EXCEL
+========================================== */
+
+function exportAsetExcel() {
+    if (!asetData.length) {
+        alert("Data aset kosong");
+        return;
     }
 
-    if(data["Umur Ekonomis (Tahun)"] <= 0){
-        return error("Umur ekonomis harus lebih dari 0 tahun.");
+    const ws = XLSX.utils.json_to_sheet(asetData);
+    const wb = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(wb, ws, "Aset Tetap");
+
+    XLSX.writeFile(
+        wb,
+        `Aset_Tetap_${new Date().toISOString().slice(0,10)}.xlsx`
+    );
+}
+
+/* ==========================================
+   EXPORT PDF
+========================================== */
+
+function exportAsetPDF() {
+    if (!asetData.length) {
+        alert("Data aset kosong");
+        return;
     }
 
-    const result = await apiPost("saveAsetTetap", data);
-    if(!result.success){
-        return error(result.message || "Gagal menyimpan aset.");
+    const { jsPDF } = window.jspdf;
+
+    const doc = new jsPDF({
+        orientation: "landscape",
+        unit: "mm",
+        format: "a4"
+    });
+
+    doc.setFontSize(16);
+    doc.text("AUMARIX ACCOUNTING SYSTEM", 14, 15);
+
+    doc.setFontSize(12);
+    doc.text("LAPORAN ASET TETAP", 14, 23);
+
+    const body = asetData.map(aset => [
+        aset["Kode Aset"] || aset.kodeAset || "",
+        aset["Nama Aset"] || aset.namaAset || "",
+        aset["Tanggal Perolehan"] || aset.tanggalPerolehan || "",
+        rupiahAset(aset["Harga Perolehan"] || aset.hargaPerolehan),
+        rupiahAset(aset["Nilai Residu"] || aset.nilaiResidu),
+        aset["Umur Ekonomis (Tahun)"] || aset.umurEkonomis || "",
+        rupiahAset(aset.penyusutanBulanan),
+        rupiahAset(aset.akumulasiPenyusutan),
+        rupiahAset(aset.nilaiBuku),
+        aset["Status"] || aset.status || ""
+    ]);
+
+    doc.autoTable({
+        startY: 30,
+        head: [[
+            "Kode",
+            "Nama Aset",
+            "Tanggal",
+            "Harga",
+            "Residu",
+            "Umur",
+            "Susut/Bulan",
+            "Akumulasi",
+            "Nilai Buku",
+            "Status"
+        ]],
+        body: body,
+        theme: "grid",
+        styles: {
+            fontSize: 7,
+            cellPadding: 2
+        },
+        headStyles: {
+            fillColor: [37, 99, 235],
+            textColor: 255
+        }
+    });
+
+    doc.save(
+        `Aset_Tetap_${new Date().toISOString().slice(0,10)}.pdf`
+    );
+}
+
+/* ==========================================
+   AUTO LOAD
+========================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+    if (
+        document.getElementById("asetTable") &&
+        typeof loadAsetTetap === "function"
+    ) {
+        loadAsetTetap();
     }
-
-    success(result.message || "Data aset berhasil disimpan.");
-    hideAsetForm();
-    loadAset();
-}
-
-async function deleteAset(kodeAset){
-    if(!confirm(`Hapus aset ${kodeAset}?`)) return;
-
-    const result = await apiPost("deleteAsetTetap", { kodeAset });
-    if(!result.success){
-        return error(result.message || "Gagal menghapus aset.");
-    }
-
-    success(result.message || "Data aset berhasil dihapus.");
-    loadAset();
-}
-
-function setText(id,value){
-    const el = document.getElementById(id);
-    if(el) el.innerText = value;
-}
-
-function setValue(id,value){
-    const el = document.getElementById(id);
-    if(el) el.value = value;
-}
-
-function getValue(id){
-    return document.getElementById(id)?.value || "";
-}
-
-function toInputDate(value){
-    if(!value) return "";
-    const date = new Date(value);
-    if(Number.isNaN(date.getTime())) return String(value).slice(0,10);
-    return date.toISOString().slice(0,10);
-}
-
-function escapeHTML(value){
-    return String(value ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-}
-
-function escapeAttr(value){
-    return escapeHTML(value).replace(/`/g,"&#096;");
-}
+});

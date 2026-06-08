@@ -1,65 +1,256 @@
+<!-- =====================================================
+     AUMARIX ACCOUNTING SYSTEM
+     FILE : asettetap.html
+===================================================== -->
+
 <div class="aset-page">
 
     <div class="page-header">
+
         <div>
-            <h2>Aset Tetap</h2>
-            <p>Kelola data aset tetap dan dasar perhitungan penyusutan.</p>
+            <h2>🏢 Aset Tetap</h2>
+            <p>Master aset tetap, penyusutan bulanan, akumulasi penyusutan, dan nilai buku</p>
         </div>
-        <div class="action-group">
-            <button class="btn btn-primary" onclick="showAsetForm()"><i class="fas fa-plus"></i> Tambah Aset</button>
-            <button class="btn" onclick="loadAset()"><i class="fas fa-rotate"></i> Refresh</button>
+
+        <div class="header-actions">
+
+            <button
+                type="button"
+                class="btn btn-primary"
+                onclick="showAsetModal()">
+                ➕ Tambah Aset
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-success"
+                onclick="loadAsetTetap()">
+                🔄 Refresh
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-warning"
+                onclick="exportAsetExcel()">
+                📊 Excel
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-danger"
+                onclick="exportAsetPDF()">
+                📄 PDF
+            </button>
+
         </div>
+
     </div>
 
-    <div class="kpi-grid aset-summary">
-        <div class="kpi-card"><span>Jumlah Aset</span><h3 id="asetTotalUnit">0</h3></div>
-        <div class="kpi-card"><span>Harga Perolehan</span><h3 id="asetTotalPerolehan">Rp 0</h3></div>
-        <div class="kpi-card"><span>Nilai Residu</span><h3 id="asetTotalResidu">Rp 0</h3></div>
-        <div class="kpi-card"><span>Estimasi Penyusutan / Tahun</span><h3 id="asetTotalPenyusutan">Rp 0</h3></div>
-    </div>
+    <div class="aset-summary">
 
-    <div class="card aset-form-card" id="asetFormCard" style="display:none;">
-        <h3 id="asetFormTitle">Tambah Aset Tetap</h3>
-        <input type="hidden" id="asetEditMode" value="false">
-        <div class="form-grid">
-            <label>Kode Aset<input id="kodeAset" type="text" placeholder="AST-001"></label>
-            <label>Nama Aset<input id="namaAset" type="text" placeholder="Laptop / Kendaraan"></label>
-            <label>Kode Akun<input id="kodeAkunAset" type="text" placeholder="Contoh: 12110"></label>
-            <label>Tanggal Perolehan<input id="tanggalPerolehan" type="date"></label>
-            <label>Harga Perolehan<input id="hargaPerolehan" type="number" min="0" value="0"></label>
-            <label>Nilai Residu<input id="nilaiResidu" type="number" min="0" value="0"></label>
-            <label>Umur Ekonomis (Tahun)<input id="umurEkonomis" type="number" min="1" value="1"></label>
+        <div class="summary-card">
+            <div class="summary-title">Total Aset</div>
+            <div id="asetTotal" class="summary-value">0</div>
         </div>
-        <div class="action-group">
-            <button class="btn btn-primary" onclick="saveAset()">Simpan</button>
-            <button class="btn" onclick="hideAsetForm()">Batal</button>
+
+        <div class="summary-card">
+            <div class="summary-title">Harga Perolehan</div>
+            <div id="asetHargaTotal" class="summary-value">Rp 0</div>
         </div>
+
+        <div class="summary-card">
+            <div class="summary-title">Akumulasi Penyusutan</div>
+            <div id="asetAkumulasiTotal" class="summary-value">Rp 0</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-title">Nilai Buku</div>
+            <div id="asetNilaiBukuTotal" class="summary-value">Rp 0</div>
+        </div>
+
     </div>
 
     <div class="card">
-        <div class="table-toolbar">
-            <input id="searchAset" type="search" placeholder="Cari kode/nama aset..." oninput="renderAsetTable()">
-        </div>
+
         <div class="table-responsive">
-            <table>
+
+            <table class="table aset-table">
+
                 <thead>
                     <tr>
                         <th>Kode Aset</th>
                         <th>Nama Aset</th>
-                        <th>Kode Akun</th>
+                        <th>Kode Akun Aset</th>
+                        <th>Kode Akun Akumulasi</th>
+                        <th>Kode Akun Beban</th>
                         <th>Tanggal Perolehan</th>
-                        <th>Harga Perolehan</th>
-                        <th>Nilai Residu</th>
+                        <th class="text-right">Harga</th>
+                        <th class="text-right">Residu</th>
                         <th>Umur</th>
-                        <th>Penyusutan/Tahun</th>
+                        <th class="text-right">Susut/Bulan</th>
+                        <th class="text-right">Akumulasi</th>
+                        <th class="text-right">Nilai Buku</th>
+                        <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
+
                 <tbody id="asetTable">
-                    <tr><td colspan="9" class="text-center">Memuat data...</td></tr>
+                    <tr>
+                        <td colspan="14" class="empty-table">
+                            Memuat data aset tetap...
+                        </td>
+                    </tr>
                 </tbody>
+
             </table>
+
         </div>
+
+    </div>
+
+</div>
+
+<div class="modal" id="asetModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h3 id="asetModalTitle">Tambah Aset Tetap</h3>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeAsetModal()">
+                ×
+            </button>
+
+        </div>
+
+        <input type="hidden" id="editModeAset">
+        <input type="hidden" id="oldKodeAset">
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label class="form-label" for="asetKode">Kode Aset</label>
+                <input
+                    type="text"
+                    id="asetKode"
+                    class="form-control"
+                    placeholder="Contoh: AST-001">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="asetNama">Nama Aset</label>
+                <input
+                    type="text"
+                    id="asetNama"
+                    class="form-control"
+                    placeholder="Contoh: Kendaraan Operasional">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="asetKodeAkun">Kode Akun Aset</label>
+                <input
+                    type="text"
+                    id="asetKodeAkun"
+                    class="form-control"
+                    placeholder="Contoh: 14113">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="asetKodeAkumulasi">Kode Akun Akumulasi</label>
+                <input
+                    type="text"
+                    id="asetKodeAkumulasi"
+                    class="form-control"
+                    placeholder="Contoh: 14117">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="asetKodeBeban">Kode Akun Beban Penyusutan</label>
+                <input
+                    type="text"
+                    id="asetKodeBeban"
+                    class="form-control"
+                    placeholder="Contoh: 61117">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="asetTanggal">Tanggal Perolehan</label>
+                <input
+                    type="date"
+                    id="asetTanggal"
+                    class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="asetHarga">Harga Perolehan</label>
+                <input
+                    type="number"
+                    id="asetHarga"
+                    class="form-control"
+                    value="0"
+                    min="0">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="asetResidu">Nilai Residu</label>
+                <input
+                    type="number"
+                    id="asetResidu"
+                    class="form-control"
+                    value="0"
+                    min="0">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="asetUmur">Umur Ekonomis (Tahun)</label>
+                <input
+                    type="number"
+                    id="asetUmur"
+                    class="form-control"
+                    value="1"
+                    min="1">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="asetMetode">Metode Penyusutan</label>
+                <select id="asetMetode" class="form-control">
+                    <option value="GARIS_LURUS">Garis Lurus</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="asetStatus">Status</label>
+                <select id="asetStatus" class="form-control">
+                    <option value="AKTIF">AKTIF</option>
+                    <option value="NONAKTIF">NONAKTIF</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button
+                type="button"
+                class="btn btn-success"
+                onclick="saveAsetData()">
+                💾 Simpan
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-danger"
+                onclick="closeAsetModal()">
+                ❌ Batal
+            </button>
+
+        </div>
+
     </div>
 
 </div>
